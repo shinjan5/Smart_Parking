@@ -1,0 +1,51 @@
+{
+  "slots": [
+    {
+      "id": 1,
+      "size": "small",
+      "status": "occupied",
+      "distance_m": 10
+    },
+    {
+      "id": 2,
+      "size": "small",
+      "status": "free",
+      "distance_m": 12
+    },
+    {
+      "id": 3,
+      "size": "medium",
+      "status": "occupied",
+      "distance_m": 8
+    },
+    {
+      "id": 4,
+      "size": "large",
+      "status": "occupied",
+      "distance_m": 15
+    },
+    {
+      "id": 5,
+      "size": "large",
+      "status": "occupied",
+      "distance_m": 20
+    },
+    {
+      "id": 6,
+      "size": "medium",
+      "status": "occupied",
+      "distance_m": 5
+    }
+  ],
+  "cnn_samples": [
+    {
+      "camera_id": "entry_cam_1",
+      "detected": {
+        "plate": "MH12AB1234",
+        "model": "Honda City",
+        "size": "medium",
+        "confidence": 0.98
+      }
+    }
+  ]
+}
