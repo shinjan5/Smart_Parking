@@ -1,0 +1,46 @@
+{
+  "slots": [
+    {
+      "id": 1,
+      "size": "small",
+      "distance": 20,
+      "status": "free"
+    },
+    {
+      "id": 2,
+      "size": "small",
+      "distance": 25,
+      "status": "free"
+    },
+    {
+      "id": 3,
+      "size": "medium",
+      "distance": 30,
+      "status": "occupied"
+    },
+    {
+      "id": 4,
+      "size": "medium",
+      "distance": 35,
+      "status": "occupied"
+    },
+    {
+      "id": 5,
+      "size": "medium",
+      "distance": 40,
+      "status": "free"
+    },
+    {
+      "id": 6,
+      "size": "large",
+      "distance": 45,
+      "status": "free"
+    },
+    {
+      "id": 7,
+      "size": "large",
+      "distance": 50,
+      "status": "free"
+    }
+  ]
+}

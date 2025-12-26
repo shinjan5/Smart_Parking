@@ -1,0 +1,25 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+**/__pycache__/
+
+# Python compiled files
+*.pyc
+*.pyo
+
+# VS Code settings (optional but recommended)
+.vscode/
+
+# Model weights (large files)
+models/*.pt
+
+# Test videos / uploads
+test_videos/
+*.mp4
+*.avi
+*.mov
+
+# Database (if you don't want it tracked)
+parking.db

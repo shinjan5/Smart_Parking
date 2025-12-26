@@ -1,19 +1,24 @@
 flask
-flask-cors
 streamlit
-sqlite-utils
-sqlalchemy
+requests
+
+# Vision
+ultralytics
+opencv-python
+pillow
+numpy
+easyocr
+
+# Agentic AI
 langchain
 langgraph
-langchain-community
 langchain-core
+langchain-community
 langchain-google-genai
 google-generativeai
-pandas
-numpy
+
+# Persistence & utils
+sqlite-utils
 python-dotenv
-requests
-tqdm
+pandas
 loguru
-pytest
-pytest-asyncio
