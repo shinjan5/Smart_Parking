@@ -30,3 +30,25 @@ flowchart TD
 
     M[🛂 Security Dashboard<br/>Streamlit] -->|Live Monitoring| J
     M -->|Slot State| H
+
+
+## ⚙️ Core Workflow
+
+1. Camera / video / image feed is ingested at the parking gate  
+2. YOLO detects license plates and EasyOCR extracts text  
+3. Entry agent validates pre-booking from SQLite  
+4. Slot assignment agent selects the **closest compatible free slot**  
+5. Dynamic pricing is calculated using real-time occupancy  
+6. Entry is persisted in the database  
+7. Customer & security dashboards update instantly  
+
+---
+
+## 💰 Dynamic Pricing Formula
+
+Dynamic pricing increases parking cost as occupancy rises beyond **50%**.
+
+### Formula
+```text
+price = BASE_PRICE × (1 + ELASTICITY × max(0, occupancy_ratio − 0.5))
+
