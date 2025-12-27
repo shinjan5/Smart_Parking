@@ -6,7 +6,19 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 app = Flask(__name__)
+
+def get_majority_value(values):
+    counts = {}
+    for v in values:
+        counts[v] = counts.get(v, 0) + 1
+
+    # pick value with max count
+    majority_value = max(counts, key=counts.get)
+    return majority_value, counts
+
 
 @app.route("/vision/detect_plate", methods=["POST"])
 def detect_plate():
@@ -30,6 +42,7 @@ def detect_plate():
         
         # Run vision agent
         vision = vision_agent_process(image_bytes)
+        
         
         if not vision.get("plate"):
             return jsonify({"status": "no_plate_detected"})
@@ -55,7 +68,7 @@ def health():
 @app.route("/upload-video", methods=["POST"])
 def upload_video():
     """
-    Endpoint for uploading video - saves only, doesn't process
+    Simple video upload endpoint - saves file only
     """
     try:
         if 'file' not in request.files:
@@ -66,21 +79,21 @@ def upload_video():
         if file.filename == '':
             return jsonify({"status": "error", "message": "Empty filename"}), 400
         
-        # Create temp directory if it doesn't exist (Windows compatible)
+        # Create temp directory
         import tempfile
         from pathlib import Path
         
         temp_dir = Path(tempfile.gettempdir()) / "smart_parking_uploads"
         temp_dir.mkdir(exist_ok=True)
         
-        # Save video to temp directory
+        # Save video
         video_path = temp_dir / file.filename
         file.save(str(video_path))
         
         return jsonify({
             "status": "uploaded",
             "path": str(video_path),
-            "message": f"Video saved. Use: python ingestion/camera_ingest.py --source \"{video_path}\""
+            "message": f"Video saved. Use /process-video endpoint for plate detection."
         })
     
     except Exception as e:
@@ -90,11 +103,26 @@ def upload_video():
         }), 500
 
 
+def get_most_frequent_plate(plate_detections):
+    """
+    Get the most frequently detected plate from a list of detections
+    Returns the plate with highest count and the detection statistics
+    """
+    if not plate_detections:
+        return None, {}
+    
+    from collections import Counter
+    plate_counts = Counter(plate_detections)
+    most_common_plate = plate_counts.most_common(1)[0][0]
+    
+    return most_common_plate, dict(plate_counts)
+
+
 @app.route("/process-video", methods=["POST"])
 def process_video():
     """
     Upload AND automatically process video
-    Extracts frames at interval and detects plates
+    Processes 5 frames per second and uses majority voting for plate detection
     """
     try:
         if 'file' not in request.files:
@@ -104,9 +132,6 @@ def process_video():
         
         if file.filename == '':
             return jsonify({"status": "error", "message": "Empty filename"}), 400
-        
-        # Get interval parameter (default 1.5 seconds)
-        interval = float(request.form.get('interval', 1.5))
         
         # Create temp directory
         import tempfile
@@ -129,24 +154,34 @@ def process_video():
                 "message": "Cannot open video file"
             }), 400
         
-        results = []
-        processed_plates = set()  # Track plates already processed to avoid duplicates
-        frame_count = 0
         fps = cap.get(cv2.CAP_PROP_FPS) or 30
-        frame_interval = int(fps * interval)
+        # Process 5 frames per second
+        frame_interval = max(1, int(fps / 5))
         
         print(f"Starting video processing: {file.filename}")
-        print(f"FPS: {fps}, Frame interval: {frame_interval}")
+        print(f"Video FPS: {fps}, Processing every {frame_interval} frames (5 FPS)")
+        
+        frame_count = 0
+        detected_plates = []  # Store all detected plates for majority voting
         
         while True:
             ret, frame = cap.read()
             if not ret:
                 break
             
-            # Process frame at interval
+            # Check if frame is valid
+            if frame is None or frame.size == 0:
+                frame_count += 1
+                continue
+            
+            # Process every Nth frame to achieve 5 FPS processing
             if frame_count % frame_interval == 0:
                 # Encode frame as JPEG
-                _, jpg = cv2.imencode(".jpg", frame)
+                success, jpg = cv2.imencode(".jpg", frame)
+                if not success:
+                    frame_count += 1
+                    continue
+                    
                 image_bytes = jpg.tobytes()
                 
                 # Run vision agent
@@ -154,43 +189,42 @@ def process_video():
                 
                 if vision.get("plate"):
                     plate = vision["plate"]
-                    print(f"Frame {frame_count}: Detected plate {plate}")
-                    
-                    # Only process each unique plate once per video
-                    if plate not in processed_plates:
-                        processed_plates.add(plate)
-                        
-                        # Run entry recognition agent
-                        result = entry_recognition_agent(vision)
-                        
-                        print(f"Entry recognition result: {result}")
-                        
-                        results.append({
-                            "frame": frame_count,
-                            "timestamp": frame_count / fps,
-                            "plate": plate,
-                            "result": result
-                        })
-                        
-                        # If entry was successful, stop processing this plate
-                        if result.get("status") == "entered":
-                            print(f"Plate {plate} successfully entered. Continuing to look for other vehicles...")
-                    else:
-                        print(f"Frame {frame_count}: Plate {plate} already processed, skipping")
+                    detected_plates.append(plate)
+                    print(f"Frame {frame_count} ({frame_count/fps:.1f}s): Detected plate {plate}")
             
             frame_count += 1
         
         cap.release()
         
-        print(f"Video processing complete. Total frames: {frame_count}, Unique plates: {len(results)}")
-        
-        return jsonify({
-            "status": "completed",
-            "video_path": str(video_path),
-            "total_frames": frame_count,
-            "unique_plates_detected": len(results),
-            "detections": results
-        })
+        # Use majority voting to get the final plate
+        if detected_plates:
+            final_plate, plate_statistics = get_most_frequent_plate(detected_plates)
+            
+            print(f"Plate detection summary:")
+            print(f"  Total detections: {len(detected_plates)}")
+            print(f"  Unique plates: {list(plate_statistics.keys())}")
+            print(f"  Detection counts: {plate_statistics}")
+            print(f"  Selected plate: {final_plate}")
+            
+            # Process the final selected plate
+            result = entry_recognition_agent({"plate": final_plate})
+            
+            return jsonify({
+                "status": "completed",
+                "video_path": str(video_path),
+                "total_frames": frame_count,
+                "processed_frames": len(detected_plates),
+                "plate": final_plate,
+                "entry_result": result
+            })
+        else:
+            print("No plates detected in video")
+            return jsonify({
+                "status": "no_plates_detected",
+                "video_path": str(video_path),
+                "total_frames": frame_count,
+                "message": "No license plates detected in the video"
+            })
     
     except Exception as e:
         import traceback
@@ -204,4 +238,4 @@ def process_video():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5000, use_reloader=False)

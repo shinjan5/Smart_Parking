@@ -1,4 +1,7 @@
 # backend/agentic.py
+import torch
+
+
 
 import os
 import json
@@ -10,6 +13,10 @@ from math import isfinite
 from typing import Dict, Any, Optional, TypedDict
 from pathlib import Path
 from PIL import Image
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 from ultralytics import YOLO
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -35,12 +42,16 @@ ELASTICITY = 1.2
 
 # Init models & DB
 yolo = YOLO(YOLO_MODEL_PATH)
-reader = easyocr.Reader(["en"], gpu=False)
+if(torch.cuda.is_available()):
+    reader = easyocr.Reader(["en"], gpu=True)
+else:
+    reader = easyocr.Reader(["en"], gpu=False)
+
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     temperature=0,
-    google_api_key=os.environ.get("GOOGLE_API_KEY"),
+    google_api_key=os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"),
 )
 
 init_db()
@@ -50,24 +61,43 @@ def preprocess_for_ocr(image: np.ndarray) -> np.ndarray:
     if len(image.shape) == 3:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    image = cv2.resize(image, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-    image = cv2.GaussianBlur(image, (5, 5), 0)
+    # image = cv2.resize(image, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+    # image = cv2.GaussianBlur(image, (5, 5), 0)
 
-    image = cv2.adaptiveThreshold(
-        image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY, 11, 2
-    )
+    # image = cv2.adaptiveThreshold(
+    #     image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+    #     cv2.THRESH_BINARY, 11, 2
+    # )
 
-    kernel = np.ones((2, 2), np.uint8)
-    return cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+    # kernel = np.ones((2, 2), np.uint8)
+    # return cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+    return image
+
+# def run_easyocr(image: np.ndarray) -> str:
+#     results = reader.readtext(image)
+#     chars = [
+#         c for _, text, conf in results if conf > 0.1 for c in text if c.isalnum()
+#     ]
+#     return "".join(chars).upper()
 
 
-def run_easyocr(image: np.ndarray) -> str:
-    results = reader.readtext(image)
-    chars = [
-        c for _, text, conf in results if conf > 0.1 for c in text if c.isalnum()
-    ]
-    return "".join(chars).upper()
+def run_easyocr(processed_image)->str:
+    """
+    Takes a preprocessed image and returns text
+    """
+
+    results = reader.readtext(processed_image)
+
+    extracted_text = []
+    print(results)
+
+    for box, text, confidence in results:
+        if confidence > 0.1:
+            for char in text:
+                if char in "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUWVXYZ":
+                    extracted_text.append(char)
+
+    return "".join(extracted_text)
 
 
 def normalize_plate(text: str) -> str:
