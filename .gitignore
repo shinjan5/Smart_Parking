@@ -16,10 +16,10 @@ __pycache__/
 models/*.pt
 
 # Test videos / uploads
-test_videos/
-*.mp4
-*.avi
-*.mov
+# test_videos/
+# *.mp4
+# *.avi
+# *.mov
 
 # Database (if you don't want it tracked)
 parking.db
