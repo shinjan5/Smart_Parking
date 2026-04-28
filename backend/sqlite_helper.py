@@ -142,7 +142,7 @@ def mark_entry(plate, model, size, slot_id, price):
         "INSERT INTO entries (plate, model, size, slot_id, price, entered_at) VALUES (?, ?, ?, ?, ?, ?)",
         (plate, model, size, slot_id, price, datetime.utcnow().isoformat())
     )
-    print(f"[SQLITE] Entry recorded: {plate} -> Slot {slot_id} @ ${price}")
+    print(f"[SQLITE] Entry recorded: {plate} -> Slot {slot_id} @ ₹{price}")
     conn.close()
 
 

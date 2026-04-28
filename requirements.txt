@@ -1,25 +1,27 @@
-flask
-streamlit
-requests
+flask>=3.0
+python-dotenv>=1.0
+
+# LangChain / LangGraph agentic pipeline
+langchain>=0.2
+langchain-openai>=0.1
+langgraph>=0.1
 
 # Vision
-ultralytics
-opencv-python
-pillow
-numpy
-easyocr
+ultralytics>=8.0          
+easyocr>=1.7
+torch>=2.0                # CPU build is fine; GPU users should install the CUDA wheel separately
+torchvision>=0.15
+opencv-python>=4.9
+Pillow>=10.0
+numpy>=1.24
 
-# Agentic AI
-langchain
-langgraph
-langchain-core
-langchain-community
-langchain-google-genai
-google-generativeai
+# ── Frontend ──────────────────────────────────────────────────────────────────
+streamlit>=1.35
+pandas>=2.0
+pytz>=2024.1              # required by frontend.py for IST conversion
+requests>=2.31            # used by camera_ingest.py
 
-# Persistence & utils
-sqlite-utils
-python-dotenv
-pandas
-loguru
-pytz
+# ── Evaluation suite ──────────────────────────────────────────────────────────
+editdistance>=0.8
+tabulate>=0.9
+tqdm>=4.66

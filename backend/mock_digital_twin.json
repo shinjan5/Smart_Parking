@@ -4,7 +4,7 @@
       "id": 1,
       "size": "small",
       "distance": 20,
-      "status": "occupied"
+      "status": "free"
     },
     {
       "id": 2,
