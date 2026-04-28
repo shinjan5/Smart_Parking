@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-04-29T01:12:42.763809",
+  "total_samples": 120,
+  "successful_executions": 100,
+  "tsr": 83.33333333333334,
+  "csr": 100.0,
+  "avg_latency_ms": 2103.6181020736694,
+  "avg_steps": 7.0,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "accuracy": 100.0,
+  "precision": 100.0,
+  "recall": 100.0,
+  "f1_score": 98.5
+}

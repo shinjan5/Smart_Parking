@@ -49,7 +49,7 @@ else:
     reader = easyocr.Reader(["en"], gpu=False)
 
 llm = ChatOpenAI(
-    model="openai/gpt-oss-120b:free",
+    model="moonshotai/kimi-k2:free",
     temperature=0,
     openai_api_key=os.environ.get("OPENROUTER_API_KEY"),
     openai_api_base="https://openrouter.ai/api/v1",

@@ -2,44 +2,902 @@
   "slots": [
     {
       "id": 1,
-      "size": "small",
-      "distance": 20,
-      "status": "free"
+      "size": "medium",
+      "distance": 12,
+      "status": "occupied"
     },
     {
       "id": 2,
-      "size": "small",
-      "distance": 25,
-      "status": "free"
+      "size": "large",
+      "distance": 14,
+      "status": "occupied"
     },
     {
       "id": 3,
-      "size": "medium",
-      "distance": 30,
+      "size": "small",
+      "distance": 16,
       "status": "occupied"
     },
     {
       "id": 4,
       "size": "medium",
-      "distance": 35,
-      "status": "free"
+      "distance": 18,
+      "status": "occupied"
     },
     {
       "id": 5,
-      "size": "medium",
-      "distance": 40,
-      "status": "free"
+      "size": "large",
+      "distance": 20,
+      "status": "occupied"
     },
     {
       "id": 6,
-      "size": "large",
-      "distance": 45,
-      "status": "free"
+      "size": "small",
+      "distance": 22,
+      "status": "occupied"
     },
     {
       "id": 7,
+      "size": "medium",
+      "distance": 24,
+      "status": "occupied"
+    },
+    {
+      "id": 8,
+      "size": "large",
+      "distance": 26,
+      "status": "occupied"
+    },
+    {
+      "id": 9,
+      "size": "small",
+      "distance": 28,
+      "status": "occupied"
+    },
+    {
+      "id": 10,
+      "size": "medium",
+      "distance": 30,
+      "status": "occupied"
+    },
+    {
+      "id": 11,
+      "size": "large",
+      "distance": 32,
+      "status": "occupied"
+    },
+    {
+      "id": 12,
+      "size": "small",
+      "distance": 34,
+      "status": "occupied"
+    },
+    {
+      "id": 13,
+      "size": "medium",
+      "distance": 36,
+      "status": "occupied"
+    },
+    {
+      "id": 14,
+      "size": "large",
+      "distance": 38,
+      "status": "occupied"
+    },
+    {
+      "id": 15,
+      "size": "small",
+      "distance": 40,
+      "status": "occupied"
+    },
+    {
+      "id": 16,
+      "size": "medium",
+      "distance": 42,
+      "status": "occupied"
+    },
+    {
+      "id": 17,
+      "size": "large",
+      "distance": 44,
+      "status": "occupied"
+    },
+    {
+      "id": 18,
+      "size": "small",
+      "distance": 46,
+      "status": "occupied"
+    },
+    {
+      "id": 19,
+      "size": "medium",
+      "distance": 48,
+      "status": "occupied"
+    },
+    {
+      "id": 20,
       "size": "large",
       "distance": 50,
+      "status": "occupied"
+    },
+    {
+      "id": 21,
+      "size": "small",
+      "distance": 52,
+      "status": "occupied"
+    },
+    {
+      "id": 22,
+      "size": "medium",
+      "distance": 54,
+      "status": "occupied"
+    },
+    {
+      "id": 23,
+      "size": "large",
+      "distance": 56,
+      "status": "occupied"
+    },
+    {
+      "id": 24,
+      "size": "small",
+      "distance": 58,
+      "status": "occupied"
+    },
+    {
+      "id": 25,
+      "size": "medium",
+      "distance": 60,
+      "status": "occupied"
+    },
+    {
+      "id": 26,
+      "size": "large",
+      "distance": 62,
+      "status": "occupied"
+    },
+    {
+      "id": 27,
+      "size": "small",
+      "distance": 64,
+      "status": "occupied"
+    },
+    {
+      "id": 28,
+      "size": "medium",
+      "distance": 66,
+      "status": "occupied"
+    },
+    {
+      "id": 29,
+      "size": "large",
+      "distance": 68,
+      "status": "occupied"
+    },
+    {
+      "id": 30,
+      "size": "small",
+      "distance": 70,
+      "status": "occupied"
+    },
+    {
+      "id": 31,
+      "size": "medium",
+      "distance": 72,
+      "status": "occupied"
+    },
+    {
+      "id": 32,
+      "size": "large",
+      "distance": 74,
+      "status": "occupied"
+    },
+    {
+      "id": 33,
+      "size": "small",
+      "distance": 76,
+      "status": "occupied"
+    },
+    {
+      "id": 34,
+      "size": "medium",
+      "distance": 78,
+      "status": "occupied"
+    },
+    {
+      "id": 35,
+      "size": "large",
+      "distance": 80,
+      "status": "occupied"
+    },
+    {
+      "id": 36,
+      "size": "small",
+      "distance": 82,
+      "status": "occupied"
+    },
+    {
+      "id": 37,
+      "size": "medium",
+      "distance": 84,
+      "status": "occupied"
+    },
+    {
+      "id": 38,
+      "size": "large",
+      "distance": 86,
+      "status": "occupied"
+    },
+    {
+      "id": 39,
+      "size": "small",
+      "distance": 88,
+      "status": "occupied"
+    },
+    {
+      "id": 40,
+      "size": "medium",
+      "distance": 90,
+      "status": "occupied"
+    },
+    {
+      "id": 41,
+      "size": "large",
+      "distance": 92,
+      "status": "occupied"
+    },
+    {
+      "id": 42,
+      "size": "small",
+      "distance": 94,
+      "status": "occupied"
+    },
+    {
+      "id": 43,
+      "size": "medium",
+      "distance": 96,
+      "status": "occupied"
+    },
+    {
+      "id": 44,
+      "size": "large",
+      "distance": 98,
+      "status": "occupied"
+    },
+    {
+      "id": 45,
+      "size": "small",
+      "distance": 100,
+      "status": "occupied"
+    },
+    {
+      "id": 46,
+      "size": "medium",
+      "distance": 102,
+      "status": "occupied"
+    },
+    {
+      "id": 47,
+      "size": "large",
+      "distance": 104,
+      "status": "occupied"
+    },
+    {
+      "id": 48,
+      "size": "small",
+      "distance": 106,
+      "status": "occupied"
+    },
+    {
+      "id": 49,
+      "size": "medium",
+      "distance": 108,
+      "status": "occupied"
+    },
+    {
+      "id": 50,
+      "size": "large",
+      "distance": 110,
+      "status": "occupied"
+    },
+    {
+      "id": 51,
+      "size": "small",
+      "distance": 112,
+      "status": "occupied"
+    },
+    {
+      "id": 52,
+      "size": "medium",
+      "distance": 114,
+      "status": "occupied"
+    },
+    {
+      "id": 53,
+      "size": "large",
+      "distance": 116,
+      "status": "occupied"
+    },
+    {
+      "id": 54,
+      "size": "small",
+      "distance": 118,
+      "status": "occupied"
+    },
+    {
+      "id": 55,
+      "size": "medium",
+      "distance": 120,
+      "status": "occupied"
+    },
+    {
+      "id": 56,
+      "size": "large",
+      "distance": 122,
+      "status": "occupied"
+    },
+    {
+      "id": 57,
+      "size": "small",
+      "distance": 124,
+      "status": "occupied"
+    },
+    {
+      "id": 58,
+      "size": "medium",
+      "distance": 126,
+      "status": "occupied"
+    },
+    {
+      "id": 59,
+      "size": "large",
+      "distance": 128,
+      "status": "occupied"
+    },
+    {
+      "id": 60,
+      "size": "small",
+      "distance": 130,
+      "status": "occupied"
+    },
+    {
+      "id": 61,
+      "size": "medium",
+      "distance": 132,
+      "status": "occupied"
+    },
+    {
+      "id": 62,
+      "size": "large",
+      "distance": 134,
+      "status": "occupied"
+    },
+    {
+      "id": 63,
+      "size": "small",
+      "distance": 136,
+      "status": "occupied"
+    },
+    {
+      "id": 64,
+      "size": "medium",
+      "distance": 138,
+      "status": "occupied"
+    },
+    {
+      "id": 65,
+      "size": "large",
+      "distance": 140,
+      "status": "occupied"
+    },
+    {
+      "id": 66,
+      "size": "small",
+      "distance": 142,
+      "status": "occupied"
+    },
+    {
+      "id": 67,
+      "size": "medium",
+      "distance": 144,
+      "status": "occupied"
+    },
+    {
+      "id": 68,
+      "size": "large",
+      "distance": 146,
+      "status": "occupied"
+    },
+    {
+      "id": 69,
+      "size": "small",
+      "distance": 148,
+      "status": "occupied"
+    },
+    {
+      "id": 70,
+      "size": "medium",
+      "distance": 150,
+      "status": "occupied"
+    },
+    {
+      "id": 71,
+      "size": "large",
+      "distance": 152,
+      "status": "occupied"
+    },
+    {
+      "id": 72,
+      "size": "small",
+      "distance": 154,
+      "status": "occupied"
+    },
+    {
+      "id": 73,
+      "size": "medium",
+      "distance": 156,
+      "status": "occupied"
+    },
+    {
+      "id": 74,
+      "size": "large",
+      "distance": 158,
+      "status": "occupied"
+    },
+    {
+      "id": 75,
+      "size": "small",
+      "distance": 160,
+      "status": "occupied"
+    },
+    {
+      "id": 76,
+      "size": "medium",
+      "distance": 162,
+      "status": "occupied"
+    },
+    {
+      "id": 77,
+      "size": "large",
+      "distance": 164,
+      "status": "occupied"
+    },
+    {
+      "id": 78,
+      "size": "small",
+      "distance": 166,
+      "status": "occupied"
+    },
+    {
+      "id": 79,
+      "size": "medium",
+      "distance": 168,
+      "status": "occupied"
+    },
+    {
+      "id": 80,
+      "size": "large",
+      "distance": 170,
+      "status": "occupied"
+    },
+    {
+      "id": 81,
+      "size": "small",
+      "distance": 172,
+      "status": "occupied"
+    },
+    {
+      "id": 82,
+      "size": "medium",
+      "distance": 174,
+      "status": "occupied"
+    },
+    {
+      "id": 83,
+      "size": "large",
+      "distance": 176,
+      "status": "occupied"
+    },
+    {
+      "id": 84,
+      "size": "small",
+      "distance": 178,
+      "status": "occupied"
+    },
+    {
+      "id": 85,
+      "size": "medium",
+      "distance": 180,
+      "status": "free"
+    },
+    {
+      "id": 86,
+      "size": "large",
+      "distance": 182,
+      "status": "occupied"
+    },
+    {
+      "id": 87,
+      "size": "small",
+      "distance": 184,
+      "status": "occupied"
+    },
+    {
+      "id": 88,
+      "size": "medium",
+      "distance": 186,
+      "status": "free"
+    },
+    {
+      "id": 89,
+      "size": "large",
+      "distance": 188,
+      "status": "occupied"
+    },
+    {
+      "id": 90,
+      "size": "small",
+      "distance": 190,
+      "status": "occupied"
+    },
+    {
+      "id": 91,
+      "size": "medium",
+      "distance": 192,
+      "status": "free"
+    },
+    {
+      "id": 92,
+      "size": "large",
+      "distance": 194,
+      "status": "free"
+    },
+    {
+      "id": 93,
+      "size": "small",
+      "distance": 196,
+      "status": "occupied"
+    },
+    {
+      "id": 94,
+      "size": "medium",
+      "distance": 198,
+      "status": "free"
+    },
+    {
+      "id": 95,
+      "size": "large",
+      "distance": 200,
+      "status": "free"
+    },
+    {
+      "id": 96,
+      "size": "small",
+      "distance": 202,
+      "status": "occupied"
+    },
+    {
+      "id": 97,
+      "size": "medium",
+      "distance": 204,
+      "status": "free"
+    },
+    {
+      "id": 98,
+      "size": "large",
+      "distance": 206,
+      "status": "free"
+    },
+    {
+      "id": 99,
+      "size": "small",
+      "distance": 208,
+      "status": "occupied"
+    },
+    {
+      "id": 100,
+      "size": "medium",
+      "distance": 210,
+      "status": "free"
+    },
+    {
+      "id": 101,
+      "size": "large",
+      "distance": 212,
+      "status": "free"
+    },
+    {
+      "id": 102,
+      "size": "small",
+      "distance": 214,
+      "status": "occupied"
+    },
+    {
+      "id": 103,
+      "size": "medium",
+      "distance": 216,
+      "status": "free"
+    },
+    {
+      "id": 104,
+      "size": "large",
+      "distance": 218,
+      "status": "free"
+    },
+    {
+      "id": 105,
+      "size": "small",
+      "distance": 220,
+      "status": "occupied"
+    },
+    {
+      "id": 106,
+      "size": "medium",
+      "distance": 222,
+      "status": "free"
+    },
+    {
+      "id": 107,
+      "size": "large",
+      "distance": 224,
+      "status": "free"
+    },
+    {
+      "id": 108,
+      "size": "small",
+      "distance": 226,
+      "status": "occupied"
+    },
+    {
+      "id": 109,
+      "size": "medium",
+      "distance": 228,
+      "status": "free"
+    },
+    {
+      "id": 110,
+      "size": "large",
+      "distance": 230,
+      "status": "free"
+    },
+    {
+      "id": 111,
+      "size": "small",
+      "distance": 232,
+      "status": "occupied"
+    },
+    {
+      "id": 112,
+      "size": "medium",
+      "distance": 234,
+      "status": "free"
+    },
+    {
+      "id": 113,
+      "size": "large",
+      "distance": 236,
+      "status": "free"
+    },
+    {
+      "id": 114,
+      "size": "small",
+      "distance": 238,
+      "status": "occupied"
+    },
+    {
+      "id": 115,
+      "size": "medium",
+      "distance": 240,
+      "status": "free"
+    },
+    {
+      "id": 116,
+      "size": "large",
+      "distance": 242,
+      "status": "free"
+    },
+    {
+      "id": 117,
+      "size": "small",
+      "distance": 244,
+      "status": "occupied"
+    },
+    {
+      "id": 118,
+      "size": "medium",
+      "distance": 246,
+      "status": "free"
+    },
+    {
+      "id": 119,
+      "size": "large",
+      "distance": 248,
+      "status": "free"
+    },
+    {
+      "id": 120,
+      "size": "small",
+      "distance": 250,
+      "status": "occupied"
+    },
+    {
+      "id": 121,
+      "size": "medium",
+      "distance": 252,
+      "status": "free"
+    },
+    {
+      "id": 122,
+      "size": "large",
+      "distance": 254,
+      "status": "free"
+    },
+    {
+      "id": 123,
+      "size": "small",
+      "distance": 256,
+      "status": "occupied"
+    },
+    {
+      "id": 124,
+      "size": "medium",
+      "distance": 258,
+      "status": "free"
+    },
+    {
+      "id": 125,
+      "size": "large",
+      "distance": 260,
+      "status": "free"
+    },
+    {
+      "id": 126,
+      "size": "small",
+      "distance": 262,
+      "status": "occupied"
+    },
+    {
+      "id": 127,
+      "size": "medium",
+      "distance": 264,
+      "status": "free"
+    },
+    {
+      "id": 128,
+      "size": "large",
+      "distance": 266,
+      "status": "free"
+    },
+    {
+      "id": 129,
+      "size": "small",
+      "distance": 268,
+      "status": "free"
+    },
+    {
+      "id": 130,
+      "size": "medium",
+      "distance": 270,
+      "status": "free"
+    },
+    {
+      "id": 131,
+      "size": "large",
+      "distance": 272,
+      "status": "free"
+    },
+    {
+      "id": 132,
+      "size": "small",
+      "distance": 274,
+      "status": "free"
+    },
+    {
+      "id": 133,
+      "size": "medium",
+      "distance": 276,
+      "status": "free"
+    },
+    {
+      "id": 134,
+      "size": "large",
+      "distance": 278,
+      "status": "free"
+    },
+    {
+      "id": 135,
+      "size": "small",
+      "distance": 280,
+      "status": "free"
+    },
+    {
+      "id": 136,
+      "size": "medium",
+      "distance": 282,
+      "status": "free"
+    },
+    {
+      "id": 137,
+      "size": "large",
+      "distance": 284,
+      "status": "free"
+    },
+    {
+      "id": 138,
+      "size": "small",
+      "distance": 286,
+      "status": "free"
+    },
+    {
+      "id": 139,
+      "size": "medium",
+      "distance": 288,
+      "status": "free"
+    },
+    {
+      "id": 140,
+      "size": "large",
+      "distance": 290,
+      "status": "free"
+    },
+    {
+      "id": 141,
+      "size": "small",
+      "distance": 292,
+      "status": "free"
+    },
+    {
+      "id": 142,
+      "size": "medium",
+      "distance": 294,
+      "status": "free"
+    },
+    {
+      "id": 143,
+      "size": "large",
+      "distance": 296,
+      "status": "free"
+    },
+    {
+      "id": 144,
+      "size": "small",
+      "distance": 298,
+      "status": "free"
+    },
+    {
+      "id": 145,
+      "size": "medium",
+      "distance": 300,
+      "status": "free"
+    },
+    {
+      "id": 146,
+      "size": "large",
+      "distance": 302,
+      "status": "free"
+    },
+    {
+      "id": 147,
+      "size": "small",
+      "distance": 304,
+      "status": "free"
+    },
+    {
+      "id": 148,
+      "size": "medium",
+      "distance": 306,
+      "status": "free"
+    },
+    {
+      "id": 149,
+      "size": "large",
+      "distance": 308,
+      "status": "free"
+    },
+    {
+      "id": 150,
+      "size": "small",
+      "distance": 310,
       "status": "free"
     }
   ]
