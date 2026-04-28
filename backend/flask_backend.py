@@ -134,6 +134,26 @@ def detect_plate():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+@app.route("/benchmark/run_scenario", methods=["POST"])
+def benchmark_scenario():
+    """
+    Accepts JSON: { "plate": "..." }
+    Bypasses vision to test agent logic directly for research benchmarking.
+    """
+    try:
+        data = request.get_json(force=True)
+        plate = data.get("plate")
+        if not plate:
+            return jsonify({"status": "error", "message": "plate is required"}), 400
+        
+        result = entry_recognition_agent({"plate": plate})
+        print(f"[BENCHMARK] Final response for {plate}: {result}")
+        return jsonify(result)
+    except Exception as e:
+        print(f"[BENCHMARK] ERROR: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 # ── vehicle exit ─────────────────────────────────────────────────────────────
 
 @app.route("/exit", methods=["POST"])

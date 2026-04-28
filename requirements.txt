@@ -25,3 +25,4 @@ requests>=2.31            # used by camera_ingest.py
 editdistance>=0.8
 tabulate>=0.9
 tqdm>=4.66
+opencv-python

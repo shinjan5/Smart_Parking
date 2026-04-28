@@ -71,7 +71,7 @@ def count_detections_for_plate(plate: str) -> int:
 
 
 # ── tabs ──────────────────────────────────────────────────────────────────────
-tab1, tab2, tab3 = st.tabs(["📋 Pre-Booking", "🔍 Check Status", "📊 Entry Dashboard"])
+tab1, tab2, tab3, tab4 = st.tabs(["📋 Pre-Booking", "🔍 Check Status", "📊 Entry Dashboard", "🛂 Gate Simulation"])
 
 
 # ══ TAB 1: PRE-BOOKING ═══════════════════════════════════════════════════════
@@ -272,16 +272,16 @@ with tab3:
         entries = get_recent_entries(limit=15)
         if entries:
             formatted = [
-                [plate, slot_id, f"₹{price:.2f}", format_timestamp(entered_at)]   # FIX: ₹ not $
+                [plate, slot_id, f"₹{price:.2f}", format_timestamp(entered_at)]
                 for plate, slot_id, price, entered_at in entries
             ]
             df = pd.DataFrame(formatted, columns=["Plate", "Slot ID", "Price (₹)", "Entered At"])
-            if len(df) > 0:
-                st.success(
-                    f"Latest: **{df.iloc[0]['Plate']}** → "
-                    f"Slot **{df.iloc[0]['Slot ID']}** | {df.iloc[0]['Price (₹)']}"
-                )
-            st.dataframe(df, use_container_width=True, height=300)
+            
+            # Show a detailed metric for the most recent entry
+            most_recent = df.iloc[0]
+            st.info(f"🎉 **Latest Arrival:** Vehicle **{most_recent['Plate']}** parked in Slot **{most_recent['Slot ID']}**.")
+            
+            st.dataframe(df, use_container_width=True, height=350, hide_index=True)
         else:
             st.info("No entries yet. Vehicles appear here after entering through the gate.")
     except Exception as e:
@@ -298,12 +298,72 @@ with tab3:
                 for plate, detected_at in detections
             ]
             df_det = pd.DataFrame(formatted_det, columns=["Plate", "Detected At"])
-            st.dataframe(df_det, use_container_width=True, height=200)
+            st.dataframe(df_det, use_container_width=True, height=250, hide_index=True)
         else:
             st.info("No detections yet.")
     except Exception as e:
         st.error(f"Error loading detections: {e}")
 
+
+# ══ TAB 4: GATE SIMULATION ═══════════════════════════════════════════════════
+with tab4:
+    st.header("🛂 Simulate Gate Entry")
+    
+    st.info("""
+    **How Vehicle Entry Works:**
+    1. **Camera Feed:** A camera at the physical gate captures an image or video of an arriving vehicle.
+    2. **Vision Agent:** The backend processes the footage using a YOLO object detection model and OCR to extract the vehicle's licence plate.
+    3. **Agentic Pipeline (LangGraph):** The system passes the plate to a multi-agent workflow:
+       - **Reservation Agent:** Verifies if a pre-booking exists.
+       - **Slot Allocation Agent:** Finds the nearest available slot matching the vehicle's size.
+       - **Pricing Agent:** Computes dynamic pricing based on distance and demand.
+       - **Persistence Agent:** Updates the database and digital twin.
+    4. **Admission:** The gate opens, and the user's portal status updates to 'Entered'.
+    """)
+    
+    st.subheader("📷 Upload Frontgate Footage")
+    with st.container(border=True):
+        st.write("Upload an image or video to simulate gate detection")
+        uploaded_file = st.file_uploader("Choose an image or video...", type=["jpg", "jpeg", "png", "mp4", "avi", "mov"])
+        
+        if uploaded_file is not None:
+            if st.button("Process Footage", type="primary", use_container_width=True):
+                with st.spinner("Processing footage via Agentic Pipeline..."):
+                    try:
+                        files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+                        
+                        if uploaded_file.name.lower().endswith(("mp4", "avi", "mov")):
+                            endpoint = f"{FLASK_BASE}/process-video"
+                        else:
+                            endpoint = f"{FLASK_BASE}/vision/detect_plate"
+                            
+                        start_time = time.time()
+                        resp = requests.post(endpoint, files=files, timeout=120)
+                        latency = time.time() - start_time
+                        data = resp.json()
+                        
+                        # Fetch and check status logic
+                        plate_detected = data.get("plate") or (data.get("entry_result", {}).get("plate"))
+                        if plate_detected:
+                            st.success(f"✅ Extracted Plate: **{plate_detected}** (Latency: {latency:.2f}s)")
+                            
+                            entry_status = data.get("status")
+                            if "entry_result" in data:
+                                entry_status = data["entry_result"].get("status")
+                            
+                            if entry_status in ["granted", "completed", "entered"]:
+                                st.info(f"Entry Status: Allowed / Granted")
+                            elif entry_status == "denied":
+                                st.error(f"Entry Status: Denied")
+                            else:
+                                st.warning(f"Entry Status: {entry_status}")
+                        else:
+                            st.warning(f"Detection Status: {data.get('status', 'No plate detected')}")
+                            
+                        with st.expander("Raw API Response"):
+                            st.json(data)
+                    except Exception as e:
+                        st.error(f"Error processing footage: {e}")
 
 # ── footer ────────────────────────────────────────────────────────────────────
 st.divider()

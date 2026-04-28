@@ -197,6 +197,18 @@ def get_recent_entries(limit=10):
     conn.close()
     return rows
 
+def get_all_entries():
+    """Get all entries for detailed logging"""
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT plate, model, size, slot_id, price, entered_at, exited_at FROM entries ORDER BY entered_at DESC"
+    )
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
+
 
 def get_entry_by_plate(plate):
     """Get the most recent entry for a plate"""

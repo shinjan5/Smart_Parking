@@ -57,6 +57,10 @@ llm = ChatOpenAI(
 
 init_db()
 
+# Research Mock Mode (set to True to bypass LLM for testing)
+MOCK_MODE = os.environ.get("MOCK_MODE", "false").lower() == "true"
+print(f"DEBUG: agentic.py MOCK_MODE = {MOCK_MODE}")
+
 
 # ---------------------------------------------------------------------------
 # Content-extraction helper
@@ -371,13 +375,14 @@ def llm_select_slot(vehicle: Dict[str, Any]) -> Optional[int]:
     size  = vehicle.get("size", "medium")
     plate = vehicle.get("plate", "UNKNOWN")
 
-    print(f"[SLOT] Finding slot for {plate} (size: {size})")
+    print(f"[SLOT] Finding slot for {plate} (size: {size}) | MOCK_MODE={MOCK_MODE}")
     print(f"[SLOT] Current slots state: {json.dumps(dt['slots'], indent=2)}")
 
     free = [
         s for s in dt["slots"]
         if s["status"] == "free" and size_compatible_strict(s["size"], size)
     ]
+    print(f"[SLOT] Filtered free slots: {free}")
 
     if not free:
         print(f"[SLOT] No free {size} slots available!")
@@ -394,6 +399,9 @@ def llm_select_slot(vehicle: Dict[str, Any]) -> Optional[int]:
     if len(free) == 1:
         slot_id = free[0]["id"]
         print(f"[SLOT] Only one option available: slot {slot_id}")
+    elif MOCK_MODE:
+        slot_id = min(free, key=lambda s: s["distance"])["id"]
+        print(f"[SLOT] MOCK_MODE: Selected closest slot {slot_id}")
     else:
         try:
             msg = slot_prompt.invoke({
@@ -438,17 +446,19 @@ def llm_select_slot(vehicle: Dict[str, Any]) -> Optional[int]:
 
 class EntryState(TypedDict, total=False):
     plate: str
+    vision: dict
     status: str
     message: str
-    booking: dict
     model: str
     size: str
+    booking: dict
     slot_id: int
     price: float
-    # internal message histories (stripped before returning to caller)
     reservation_messages: list
     pricing_messages: list
     persist_messages: list
+    steps: int
+    start_time: float
 
 
 # ---------------------------------------------------------------------------
@@ -481,6 +491,7 @@ def reservation_node(state: EntryState) -> EntryState:
     via a ReAct loop, then emits a structured admission decision.
     """
     plate = state.get("plate")
+    print(f"[RESERVATION NODE] Called for plate: {plate}")
 
     if not plate:
         print("[RESERVATION AGENT] ERROR: No plate in state")
@@ -500,6 +511,8 @@ def reservation_node(state: EntryState) -> EntryState:
         },
     ]
 
+    steps = state.get("steps", 0)
+
     tool_executor = ToolNode(reservation_tools)
 
     # Safe defaults
@@ -509,31 +522,54 @@ def reservation_node(state: EntryState) -> EntryState:
     booking_size  = None
 
     # ReAct loop — max 6 iterations
-    for step in range(6):
-        response = reservation_llm.invoke(messages)
-        messages.append(response)
+    if MOCK_MODE:
+        print(f"[RESERVATION NODE] MOCK_MODE active for {plate}")
+        # Deterministic logic for benchmarking
+        result = lookup_booking.invoke({"plate": plate})
+        if result["found"]:
+            status_res = validate_booking_status.invoke({
+                "plate": plate, 
+                "booking_status": result["booking"]["status"]
+            })
+            if status_res["eligible"]:
+                final_status = "booked"
+                booking_model = result["booking"]["model"]
+                booking_size = result["booking"]["size"]
+                final_message = "Mocked Admission"
+            else:
+                final_status = "no_booking"
+                final_message = status_res["reason"]
+        else:
+            final_status = "no_booking"
+            final_message = result["message"]
+        steps += 2
+    else:
+        for step in range(6):
+            response = reservation_llm.invoke(messages)
+            messages.append(response)
 
-        tool_calls = getattr(response, "tool_calls", None)
-        if not tool_calls:
-            # LLM finished — parse its structured JSON decision
-            print(f"[RESERVATION AGENT] Final response: {response.content}")
-            try:
-                match = re.search(r'\{.*?\}', _extract_text(response.content), re.DOTALL)
-                if match:
-                    parsed        = json.loads(match.group())
-                    final_status  = parsed.get("status", "no_booking")
-                    final_message = parsed.get("message", "")
-                    booking_model = parsed.get("model")
-                    booking_size  = parsed.get("size")
-            except Exception as e:
-                print(f"[RESERVATION AGENT] Could not parse final response: {e}")
-            break
+            tool_calls = getattr(response, "tool_calls", None)
+            if not tool_calls:
+                # LLM finished — parse its structured JSON decision
+                print(f"[RESERVATION AGENT] Final response: {response.content}")
+                try:
+                    match = re.search(r'\{.*?\}', _extract_text(response.content), re.DOTALL)
+                    if match:
+                        parsed        = json.loads(match.group())
+                        final_status  = parsed.get("status", "no_booking")
+                        final_message = parsed.get("message", "")
+                        booking_model = parsed.get("model")
+                        booking_size  = parsed.get("size")
+                except Exception as e:
+                    print(f"[RESERVATION AGENT] Could not parse final response: {e}")
+                break
 
-        # Execute tool calls and append ToolMessage results
-        tool_results = tool_executor.invoke({"messages": messages})
-        for tm in tool_results.get("messages", []):
-            messages.append(tm)
-            print(f"[RESERVATION AGENT] Tool result: {tm.content}")
+            # Execute tool calls and append ToolMessage results
+            tool_results = tool_executor.invoke({"messages": messages})
+            for tm in tool_results.get("messages", []):
+                messages.append(tm)
+                steps += 1
+                print(f"[RESERVATION AGENT] Tool result: {tm.content}")
 
     print(f"[RESERVATION AGENT] status={final_status} | {final_message}")
 
@@ -548,6 +584,7 @@ def reservation_node(state: EntryState) -> EntryState:
             "size":    booking_size,
             "message": final_message,
             "reservation_messages": messages,
+            "steps": steps,
         }
 
     return {
@@ -555,6 +592,7 @@ def reservation_node(state: EntryState) -> EntryState:
         "status":  final_status,
         "message": final_message,
         "reservation_messages": messages,
+        "steps": steps,
     }
 
 
@@ -584,7 +622,7 @@ def slot_node(state: EntryState) -> EntryState:
         }
 
     print(f"[SLOT] Assigned slot {slot} to {plate}")
-    return {**state, "slot_id": slot}
+    return {**state, "slot_id": slot, "steps": state.get("steps", 0) + 1}
 
 
 # ---------------------------------------------------------------------------
@@ -606,6 +644,12 @@ Do NOT skip either tool call. Do NOT invent occupancy numbers."""
 def pricing_node(state: EntryState) -> EntryState:
     """Fully agentic pricing node using a ReAct loop."""
     print("[PRICING AGENT] Starting agentic pricing loop ...")
+    steps = state.get("steps", 0)
+    status = state.get("status")
+
+    if status not in ["booked", "entered"]:
+        print(f"[PRICING AGENT] Skipping (status={status})")
+        return state
 
     messages = [
         {"role": "system", "content": _PRICING_SYSTEM},
@@ -615,28 +659,38 @@ def pricing_node(state: EntryState) -> EntryState:
     tool_executor = ToolNode(pricing_tools)
     price = BASE_PRICE  # safe default
 
-    for step in range(6):
-        response = pricing_llm.invoke(messages)
-        messages.append(response)
+    if MOCK_MODE:
+        occ = get_current_occupancy.invoke({})
+        res = calculate_dynamic_price.invoke({
+            "occupied": occ["occupied"], 
+            "total": occ["total"]
+        })
+        price = res["price"]
+        steps += 2
+    else:
+        for step in range(6):
+            response = pricing_llm.invoke(messages)
+            messages.append(response)
 
-        tool_calls = getattr(response, "tool_calls", None)
-        if not tool_calls:
-            print(f"[PRICING AGENT] Final response: {response.content}")
-            try:
-                match = re.search(r'\{.*?\}', _extract_text(response.content), re.DOTALL)
-                if match:
-                    price = float(json.loads(match.group()).get("price", BASE_PRICE))
-            except Exception as e:
-                print(f"[PRICING AGENT] Could not parse price: {e}")
-            break
+            tool_calls = getattr(response, "tool_calls", None)
+            if not tool_calls:
+                print(f"[PRICING AGENT] Final response: {response.content}")
+                try:
+                    match = re.search(r'\{.*?\}', _extract_text(response.content), re.DOTALL)
+                    if match:
+                        price = float(json.loads(match.group()).get("price", BASE_PRICE))
+                except Exception as e:
+                    print(f"[PRICING AGENT] Could not parse price: {e}")
+                break
 
-        tool_results = tool_executor.invoke({"messages": messages})
-        for tm in tool_results.get("messages", []):
-            messages.append(tm)
-            print(f"[PRICING AGENT] Tool result: {tm.content}")
+            tool_results = tool_executor.invoke({"messages": messages})
+            for tm in tool_results.get("messages", []):
+                messages.append(tm)
+                steps += 1
+                print(f"[PRICING AGENT] Tool result: {tm.content}")
 
     print(f"[PRICING AGENT] Final price: INR {price}")
-    return {**state, "price": price, "pricing_messages": messages}
+    return {**state, "price": price, "pricing_messages": messages, "steps": steps}
 
 
 # ---------------------------------------------------------------------------
@@ -665,6 +719,12 @@ def persist_node(state: EntryState) -> EntryState:
     price   = state.get("price", BASE_PRICE)
 
     print(f"[PERSIST AGENT] Starting agentic persist loop for {plate} ...")
+    steps = state.get("steps", 0)
+    status = state.get("status")
+
+    if status != "booked" or not slot_id:
+        print(f"[PERSIST AGENT] Skipping persistence (status={status}, slot={slot_id})")
+        return state
 
     user_msg = (
         f"Persist the parking entry for vehicle {plate}.\n"
@@ -680,27 +740,41 @@ def persist_node(state: EntryState) -> EntryState:
     final_status  = "error"
     final_message = "Persist agent did not complete"
 
-    for step in range(8):
-        response = persist_llm.invoke(messages)
-        messages.append(response)
+    if MOCK_MODE:
+        assign_slot_to_booking.invoke({"plate": plate, "slot_id": slot_id})
+        record_vehicle_entry.invoke({
+            "plate": plate, 
+            "model": model, 
+            "size": size, 
+            "slot_id": slot_id, 
+            "price": price
+        })
+        final_status = "entered"
+        final_message = "Mocked Persist"
+        steps += 2
+    else:
+        for step in range(8):
+            response = persist_llm.invoke(messages)
+            messages.append(response)
 
-        tool_calls = getattr(response, "tool_calls", None)
-        if not tool_calls:
-            print(f"[PERSIST AGENT] Final response: {response.content}")
-            try:
-                match = re.search(r'\{.*?\}', _extract_text(response.content), re.DOTALL)
-                if match:
-                    parsed        = json.loads(match.group())
-                    final_status  = parsed.get("status", "error")
-                    final_message = parsed.get("message", "")
-            except Exception as e:
-                print(f"[PERSIST AGENT] Could not parse final response: {e}")
-            break
+            tool_calls = getattr(response, "tool_calls", None)
+            if not tool_calls:
+                print(f"[PERSIST AGENT] Final response: {response.content}")
+                try:
+                    match = re.search(r'\{.*?\}', _extract_text(response.content), re.DOTALL)
+                    if match:
+                        parsed        = json.loads(match.group())
+                        final_status  = parsed.get("status", "error")
+                        final_message = parsed.get("message", "")
+                except Exception as e:
+                    print(f"[PERSIST AGENT] Could not parse final response: {e}")
+                break
 
-        tool_results = tool_executor.invoke({"messages": messages})
-        for tm in tool_results.get("messages", []):
-            messages.append(tm)
-            print(f"[PERSIST AGENT] Tool result: {tm.content}")
+            tool_results = tool_executor.invoke({"messages": messages})
+            for tm in tool_results.get("messages", []):
+                messages.append(tm)
+                steps += 1
+                print(f"[PERSIST AGENT] Tool result: {tm.content}")
 
     print(f"[PERSIST AGENT] status={final_status} | {final_message}")
     return {
@@ -708,6 +782,7 @@ def persist_node(state: EntryState) -> EntryState:
         "status":  final_status,
         "message": final_message,
         "persist_messages": messages,
+        "steps": steps,
     }
 
 
@@ -729,26 +804,12 @@ def router(state: EntryState) -> str:
 # ---------------------------------------------------------------------------
 
 def entry_recognition_agent(vision_payload: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Main entry recognition workflow using LangGraph.
-
-    Graph topology:
-        reservation --> [router] --> slot --> pricing --> persist --> END
-                                 |
-                                 +--> END  (on no_booking / no_slot / error)
-
-    All four pipeline nodes are fully agentic ReAct loops:
-        - reservation : lookup_booking, validate_booking_status
-        - slot        : LLM prompt + deterministic argmin fallback
-        - pricing     : get_current_occupancy, calculate_dynamic_price
-        - persist     : assign_slot_to_booking, record_vehicle_entry
-    """
     plate = vision_payload.get("plate")
     if not plate:
         return {"status": "no_plate"}
 
     print(f"\n{'='*60}")
-    print(f"[ENTRY AGENT] Starting workflow for plate: {plate}")
+    print(f"[ENTRY AGENT] Starting workflow for plate: {plate} | MOCK_MODE={MOCK_MODE}")
     print(f"{'='*60}\n")
 
     graph = StateGraph(EntryState)
@@ -770,10 +831,13 @@ def entry_recognition_agent(vision_payload: Dict[str, Any]) -> Dict[str, Any]:
     entry_graph = graph.compile()
 
     try:
-        initial_state: EntryState = {"plate": plate}
+        import time
+        initial_state: EntryState = {"plate": plate, "steps": 0, "start_time": time.time()}
         print(f"[ENTRY AGENT] Initial state: {initial_state}")
 
         result = entry_graph.invoke(initial_state)
+        
+        result["latency"] = time.time() - result["start_time"]
 
         # Strip internal message histories before returning to caller
         result.pop("reservation_messages", None)
