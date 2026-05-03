@@ -33,6 +33,38 @@ def format_timestamp(iso_timestamp: str) -> str:
     except Exception:
         return iso_timestamp
 
+def get_active_entries_with_details():
+    """Get active entries joined with booking details if available"""
+    import sqlite3
+    db_path = ROOT_DIR / "backend" / "parking.db"
+    conn = sqlite3.connect(str(db_path), timeout=10.0)
+    cur = conn.cursor()
+    try:
+        cur.execute('''
+            SELECT 
+                e.slot_id, e.plate, e.model, 
+                b.name, b.brand, b.category, b.fuel_type
+            FROM entries e
+            LEFT JOIN bookings b ON e.plate = b.plate
+            WHERE e.exited_at IS NULL
+        ''')
+        rows = cur.fetchall()
+    except Exception:
+        rows = []
+    conn.close()
+    
+    mapping = {}
+    for r in rows:
+        mapping[r[0]] = {
+            "plate": r[1],
+            "model": r[2],
+            "name": r[3] or "Unknown",
+            "brand": r[4] or "Unknown",
+            "category": r[5] or "Unknown",
+            "fuel_type": r[6] or "Unknown"
+        }
+    return mapping
+
 def check_system_status():
     try:
         resp = requests.get(f"{FLASK_BASE}/", timeout=2)
@@ -112,20 +144,35 @@ with tab_live:
     if not twin["slots"]:
         st.info("No slot data available.")
     else:
-        # Group by size
-        slots_by_size = {"small": [], "medium": [], "large": []}
+        # Get active entries mapping
+        active_entries = get_active_entries_with_details()
+
+        # Group by zone
+        slots_by_zone = {}
         for slot in twin["slots"]:
-            size = slot.get("size", "unknown")
-            if size in slots_by_size:
-                slots_by_size[size].append(slot)
-            else:
-                slots_by_size["unknown"] = slots_by_size.get("unknown", []) + [slot]
+            zone = slot.get("zone", "Unknown Zone")
+            if zone not in slots_by_zone:
+                slots_by_zone[zone] = []
+            slots_by_zone[zone].append(slot)
         
-        for size_label, slots in slots_by_size.items():
+        for zone_label, slots in sorted(slots_by_zone.items()):
             if not slots:
                 continue
-            st.markdown(f"**Size: {size_label.title()}**")
-            cols = st.columns(min(len(slots), 6))
+                
+            st.markdown(f"#### {zone_label}")
+            
+            # Extract common features for the zone (optional, based on mock_digital_twin structure)
+            zone_features = set()
+            for s in slots:
+                if "features" in s:
+                    zone_features.update(s["features"])
+            
+            if zone_features:
+                st.caption(f"**Features:** {', '.join(zone_features)}")
+            else:
+                st.caption("**Features:** Standard")
+
+            cols = st.columns(min(len(slots), 8))
             for idx, slot in enumerate(slots):
                 with cols[idx % len(cols)]:
                     status = slot.get("status", "unknown")
@@ -147,13 +194,34 @@ with tab_live:
                         text = "#383d41"
 
                     slot_id = slot.get('id', 'N/A')
-                    distance = slot.get('distance', 'N/A')
+                    size = slot.get('size', 'N/A').title()
+                    
+                    # Extra info if occupied
+                    vehicle_info_html = ""
+                    if status == "occupied":
+                        v_info = active_entries.get(slot_id)
+                        if v_info:
+                            plate = v_info.get('plate', 'N/A')
+                            model = v_info.get('model', 'N/A')
+                            category = v_info.get('category', 'N/A')
+                            vehicle_info_html = f'''
+                                <div style="font-size: 0.75em; margin-top: 6px; border-top: 1px solid {color}; padding-top: 4px;">
+                                    <b>{plate}</b><br/>{model}<br/>({category})
+                                </div>
+                            '''
+                        else:
+                            vehicle_info_html = f'''
+                                <div style="font-size: 0.75em; margin-top: 6px; border-top: 1px solid {color}; padding-top: 4px;">
+                                    <i>Vehicle Info N/A</i>
+                                </div>
+                            '''
                     
                     st.markdown(f'''
-                    <div style="border: 1px solid {color}; border-top: 4px solid {color}; background-color: {bg}; color: {text}; padding: 10px; border-radius: 4px; margin-bottom: 10px; text-align: center; font-family: sans-serif;">
-                        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 5px;">Slot {slot_id}</div>
-                        <div style="font-size: 0.9em; text-transform: uppercase;">{status}</div>
-                        <div style="font-size: 0.8em; margin-top: 5px;">Dist: {distance}m</div>
+                    <div style="border: 1px solid {color}; border-top: 4px solid {color}; background-color: {bg}; color: {text}; padding: 8px; border-radius: 4px; margin-bottom: 10px; text-align: center; font-family: sans-serif; height: 100%;">
+                        <div style="font-weight: bold; font-size: 1.0em; margin-bottom: 2px;">Slot {slot_id}</div>
+                        <div style="font-size: 0.85em; text-transform: uppercase;">{status}</div>
+                        <div style="font-size: 0.8em; margin-top: 2px; opacity: 0.8;">Size: {size}</div>
+                        {vehicle_info_html}
                     </div>
                     ''', unsafe_allow_html=True)
 
@@ -163,7 +231,27 @@ with tab_gate:
     with col_upload:
         st.markdown("### Manual Gate Control")
         with st.container(border=True):
-            exit_plate = st.text_input("Licence Plate to Exit", placeholder="WB10AB1234").upper()
+            st.markdown("#### Entry")
+            entry_plate = st.text_input("Licence Plate to Enter", placeholder="WB10AB1234", key="entry_plate").upper()
+            if st.button("Record Entry", use_container_width=True) and entry_plate:
+                with st.spinner("Processing Entry..."):
+                    try:
+                        resp = requests.post(f"{FLASK_BASE}/benchmark/run_scenario", json={"plate": entry_plate}, timeout=180)
+                        data = resp.json()
+                        st.session_state.last_model_output = data
+                        st.session_state.last_model_latency = 0.0
+                        
+                        if data.get("status") == "entered" or data.get("status") == "booked":
+                            st.success(f"Entry recorded for {entry_plate}")
+                        else:
+                            st.error(f"Entry failed: {data.get('message', data.get('status'))}")
+                    except Exception as e:
+                        st.error(f"Backend unreachable: {e}")
+            
+            st.divider()
+            
+            st.markdown("#### Exit")
+            exit_plate = st.text_input("Licence Plate to Exit", placeholder="WB10AB1234", key="exit_plate").upper()
             if st.button("Record Exit", use_container_width=True) and exit_plate:
                 try:
                     resp = requests.post(f"{FLASK_BASE}/exit", json={"plate": exit_plate}, timeout=10)

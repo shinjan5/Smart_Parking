@@ -3,902 +3,1642 @@
     {
       "id": 1,
       "size": "medium",
-      "distance": 12,
-      "status": "occupied"
+      "distance": 10,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 2,
-      "size": "large",
-      "distance": 14,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 12,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 3,
-      "size": "small",
-      "distance": 16,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 14,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 4,
       "size": "medium",
-      "distance": 18,
-      "status": "occupied"
+      "distance": 16,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 5,
-      "size": "large",
-      "distance": 20,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 18,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 6,
-      "size": "small",
-      "distance": 22,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 20,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 7,
       "size": "medium",
-      "distance": 24,
-      "status": "occupied"
+      "distance": 22,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 8,
-      "size": "large",
-      "distance": 26,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 24,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 9,
-      "size": "small",
-      "distance": 28,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 26,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 10,
       "size": "medium",
-      "distance": 30,
-      "status": "occupied"
+      "distance": 28,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 11,
-      "size": "large",
-      "distance": 32,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 30,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 12,
-      "size": "small",
-      "distance": 34,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 32,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 13,
       "size": "medium",
-      "distance": 36,
-      "status": "occupied"
+      "distance": 34,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 14,
-      "size": "large",
-      "distance": 38,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 36,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 15,
-      "size": "small",
-      "distance": 40,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 38,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 16,
       "size": "medium",
-      "distance": 42,
-      "status": "occupied"
+      "distance": 40,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 17,
-      "size": "large",
-      "distance": 44,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 42,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 18,
-      "size": "small",
-      "distance": 46,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 44,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 19,
       "size": "medium",
-      "distance": 48,
-      "status": "occupied"
+      "distance": 46,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 20,
-      "size": "large",
-      "distance": 50,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 48,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 21,
-      "size": "small",
-      "distance": 52,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 50,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 22,
       "size": "medium",
-      "distance": 54,
-      "status": "occupied"
+      "distance": 52,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 23,
-      "size": "large",
-      "distance": 56,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 54,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 24,
-      "size": "small",
-      "distance": 58,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 56,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 25,
       "size": "medium",
-      "distance": 60,
-      "status": "occupied"
+      "distance": 58,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 26,
-      "size": "large",
-      "distance": 62,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 60,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 27,
-      "size": "small",
-      "distance": 64,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 62,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 28,
       "size": "medium",
-      "distance": 66,
-      "status": "occupied"
+      "distance": 64,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 29,
-      "size": "large",
-      "distance": 68,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 66,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 30,
-      "size": "small",
-      "distance": 70,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 68,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 31,
-      "size": "medium",
-      "distance": 72,
-      "status": "occupied"
+      "size": "large",
+      "distance": 70,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 32,
       "size": "large",
-      "distance": 74,
-      "status": "occupied"
+      "distance": 72,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 33,
-      "size": "small",
-      "distance": 76,
-      "status": "occupied"
+      "size": "large",
+      "distance": 74,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 34,
-      "size": "medium",
-      "distance": 78,
-      "status": "occupied"
+      "size": "large",
+      "distance": 76,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 35,
       "size": "large",
-      "distance": 80,
-      "status": "occupied"
+      "distance": 78,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 36,
-      "size": "small",
-      "distance": 82,
-      "status": "occupied"
+      "size": "large",
+      "distance": 80,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 37,
-      "size": "medium",
-      "distance": 84,
-      "status": "occupied"
+      "size": "large",
+      "distance": 82,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 38,
       "size": "large",
-      "distance": 86,
-      "status": "occupied"
+      "distance": 84,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 39,
-      "size": "small",
-      "distance": 88,
-      "status": "occupied"
+      "size": "large",
+      "distance": 86,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 40,
-      "size": "medium",
-      "distance": 90,
-      "status": "occupied"
+      "size": "large",
+      "distance": 88,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 41,
       "size": "large",
-      "distance": 92,
-      "status": "occupied"
+      "distance": 90,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 42,
-      "size": "small",
-      "distance": 94,
-      "status": "occupied"
+      "size": "large",
+      "distance": 92,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 43,
-      "size": "medium",
-      "distance": 96,
-      "status": "occupied"
+      "size": "large",
+      "distance": 94,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 44,
       "size": "large",
-      "distance": 98,
-      "status": "occupied"
+      "distance": 96,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 45,
-      "size": "small",
-      "distance": 100,
-      "status": "occupied"
+      "size": "large",
+      "distance": 98,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 46,
-      "size": "medium",
-      "distance": 102,
-      "status": "occupied"
+      "size": "large",
+      "distance": 100,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 47,
       "size": "large",
-      "distance": 104,
-      "status": "occupied"
+      "distance": 102,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 48,
-      "size": "small",
-      "distance": 106,
-      "status": "occupied"
+      "size": "large",
+      "distance": 104,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 49,
-      "size": "medium",
-      "distance": 108,
-      "status": "occupied"
+      "size": "large",
+      "distance": 106,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 50,
       "size": "large",
-      "distance": 110,
-      "status": "occupied"
+      "distance": 108,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 51,
-      "size": "small",
-      "distance": 112,
-      "status": "occupied"
+      "size": "large",
+      "distance": 110,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 52,
-      "size": "medium",
-      "distance": 114,
-      "status": "occupied"
+      "size": "large",
+      "distance": 112,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 53,
       "size": "large",
-      "distance": 116,
-      "status": "occupied"
+      "distance": 114,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 54,
-      "size": "small",
-      "distance": 118,
-      "status": "occupied"
+      "size": "large",
+      "distance": 116,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 55,
-      "size": "medium",
-      "distance": 120,
-      "status": "occupied"
+      "size": "large",
+      "distance": 118,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 56,
       "size": "large",
-      "distance": 122,
-      "status": "occupied"
+      "distance": 120,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 57,
-      "size": "small",
-      "distance": 124,
-      "status": "occupied"
+      "size": "large",
+      "distance": 122,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 58,
-      "size": "medium",
-      "distance": 126,
-      "status": "occupied"
+      "size": "large",
+      "distance": 124,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 59,
       "size": "large",
-      "distance": 128,
-      "status": "occupied"
+      "distance": 126,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 60,
-      "size": "small",
-      "distance": 130,
-      "status": "occupied"
+      "size": "large",
+      "distance": 128,
+      "status": "free",
+      "zone": "Zone A",
+      "features": [
+        "Covered",
+        "Near Stairs"
+      ]
     },
     {
       "id": 61,
-      "size": "medium",
-      "distance": 132,
-      "status": "occupied"
+      "size": "small",
+      "distance": 15,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 62,
-      "size": "large",
-      "distance": 134,
-      "status": "occupied"
+      "size": "small",
+      "distance": 17,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 63,
       "size": "small",
-      "distance": 136,
-      "status": "occupied"
+      "distance": 19,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 64,
-      "size": "medium",
-      "distance": 138,
-      "status": "occupied"
+      "size": "small",
+      "distance": 21,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 65,
-      "size": "large",
-      "distance": 140,
-      "status": "occupied"
+      "size": "small",
+      "distance": 23,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 66,
       "size": "small",
-      "distance": 142,
-      "status": "occupied"
+      "distance": 25,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 67,
-      "size": "medium",
-      "distance": 144,
-      "status": "occupied"
+      "size": "small",
+      "distance": 27,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 68,
-      "size": "large",
-      "distance": 146,
-      "status": "occupied"
+      "size": "small",
+      "distance": 29,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 69,
       "size": "small",
-      "distance": 148,
-      "status": "occupied"
+      "distance": 31,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 70,
-      "size": "medium",
-      "distance": 150,
-      "status": "occupied"
+      "size": "small",
+      "distance": 33,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 71,
-      "size": "large",
-      "distance": 152,
-      "status": "occupied"
+      "size": "small",
+      "distance": 35,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 72,
       "size": "small",
-      "distance": 154,
-      "status": "occupied"
+      "distance": 37,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 73,
-      "size": "medium",
-      "distance": 156,
-      "status": "occupied"
+      "size": "small",
+      "distance": 39,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 74,
-      "size": "large",
-      "distance": 158,
-      "status": "occupied"
+      "size": "small",
+      "distance": 41,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 75,
       "size": "small",
-      "distance": 160,
-      "status": "occupied"
+      "distance": 43,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 76,
-      "size": "medium",
-      "distance": 162,
-      "status": "occupied"
+      "size": "small",
+      "distance": 45,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 77,
-      "size": "large",
-      "distance": 164,
-      "status": "occupied"
+      "size": "small",
+      "distance": 47,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 78,
       "size": "small",
-      "distance": 166,
-      "status": "occupied"
+      "distance": 49,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 79,
-      "size": "medium",
-      "distance": 168,
-      "status": "occupied"
+      "size": "small",
+      "distance": 51,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 80,
-      "size": "large",
-      "distance": 170,
-      "status": "occupied"
+      "size": "small",
+      "distance": 53,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 81,
-      "size": "small",
-      "distance": 172,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 55,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 82,
       "size": "medium",
-      "distance": 174,
-      "status": "occupied"
+      "distance": 57,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 83,
-      "size": "large",
-      "distance": 176,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 59,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 84,
-      "size": "small",
-      "distance": 178,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 61,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 85,
       "size": "medium",
-      "distance": 180,
-      "status": "free"
+      "distance": 63,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 86,
-      "size": "large",
-      "distance": 182,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 65,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 87,
-      "size": "small",
-      "distance": 184,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 67,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 88,
       "size": "medium",
-      "distance": 186,
-      "status": "free"
+      "distance": 69,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 89,
-      "size": "large",
-      "distance": 188,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 71,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 90,
-      "size": "small",
-      "distance": 190,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 73,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 91,
       "size": "medium",
-      "distance": 192,
-      "status": "free"
+      "distance": 75,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 92,
-      "size": "large",
-      "distance": 194,
-      "status": "free"
+      "size": "medium",
+      "distance": 77,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 93,
-      "size": "small",
-      "distance": 196,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 79,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 94,
       "size": "medium",
-      "distance": 198,
-      "status": "free"
+      "distance": 81,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 95,
-      "size": "large",
-      "distance": 200,
-      "status": "free"
+      "size": "medium",
+      "distance": 83,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 96,
-      "size": "small",
-      "distance": 202,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 85,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 97,
       "size": "medium",
-      "distance": 204,
-      "status": "free"
+      "distance": 87,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 98,
-      "size": "large",
-      "distance": 206,
-      "status": "free"
+      "size": "medium",
+      "distance": 89,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 99,
-      "size": "small",
-      "distance": 208,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 91,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 100,
       "size": "medium",
-      "distance": 210,
-      "status": "free"
+      "distance": 93,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 101,
-      "size": "large",
-      "distance": 212,
-      "status": "free"
+      "size": "medium",
+      "distance": 95,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 102,
-      "size": "small",
-      "distance": 214,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 97,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 103,
       "size": "medium",
-      "distance": 216,
-      "status": "free"
+      "distance": 99,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 104,
-      "size": "large",
-      "distance": 218,
-      "status": "free"
+      "size": "medium",
+      "distance": 101,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 105,
-      "size": "small",
-      "distance": 220,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 103,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 106,
       "size": "medium",
-      "distance": 222,
-      "status": "free"
+      "distance": 105,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 107,
-      "size": "large",
-      "distance": 224,
-      "status": "free"
+      "size": "medium",
+      "distance": 107,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 108,
-      "size": "small",
-      "distance": 226,
-      "status": "occupied"
+      "size": "medium",
+      "distance": 109,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 109,
       "size": "medium",
-      "distance": 228,
-      "status": "free"
+      "distance": 111,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 110,
-      "size": "large",
-      "distance": 230,
-      "status": "free"
+      "size": "medium",
+      "distance": 113,
+      "status": "free",
+      "zone": "Zone B",
+      "features": [
+        "EV Charging"
+      ]
     },
     {
       "id": 111,
       "size": "small",
-      "distance": 232,
-      "status": "occupied"
+      "distance": 20,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 112,
-      "size": "medium",
-      "distance": 234,
-      "status": "free"
+      "size": "small",
+      "distance": 22,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 113,
-      "size": "large",
-      "distance": 236,
-      "status": "free"
+      "size": "small",
+      "distance": 24,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 114,
       "size": "small",
-      "distance": 238,
-      "status": "occupied"
+      "distance": 26,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 115,
-      "size": "medium",
-      "distance": 240,
-      "status": "free"
+      "size": "small",
+      "distance": 28,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 116,
-      "size": "large",
-      "distance": 242,
-      "status": "free"
+      "size": "small",
+      "distance": 30,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 117,
       "size": "small",
-      "distance": 244,
-      "status": "occupied"
+      "distance": 32,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 118,
-      "size": "medium",
-      "distance": 246,
-      "status": "free"
+      "size": "small",
+      "distance": 34,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 119,
-      "size": "large",
-      "distance": 248,
-      "status": "free"
+      "size": "small",
+      "distance": 36,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 120,
       "size": "small",
-      "distance": 250,
-      "status": "occupied"
+      "distance": 38,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 121,
-      "size": "medium",
-      "distance": 252,
-      "status": "free"
+      "size": "small",
+      "distance": 40,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 122,
-      "size": "large",
-      "distance": 254,
-      "status": "free"
+      "size": "small",
+      "distance": 42,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 123,
       "size": "small",
-      "distance": 256,
-      "status": "occupied"
+      "distance": 44,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 124,
-      "size": "medium",
-      "distance": 258,
-      "status": "free"
+      "size": "small",
+      "distance": 46,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 125,
-      "size": "large",
-      "distance": 260,
-      "status": "free"
+      "size": "small",
+      "distance": 48,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 126,
       "size": "small",
-      "distance": 262,
-      "status": "occupied"
+      "distance": 50,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 127,
-      "size": "medium",
-      "distance": 264,
-      "status": "free"
+      "size": "small",
+      "distance": 52,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 128,
-      "size": "large",
-      "distance": 266,
-      "status": "free"
+      "size": "small",
+      "distance": 54,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 129,
       "size": "small",
-      "distance": 268,
-      "status": "free"
+      "distance": 56,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 130,
-      "size": "medium",
-      "distance": 270,
-      "status": "free"
+      "size": "small",
+      "distance": 58,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 131,
-      "size": "large",
-      "distance": 272,
-      "status": "free"
+      "size": "medium",
+      "distance": 60,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 132,
-      "size": "small",
-      "distance": 274,
-      "status": "free"
+      "size": "medium",
+      "distance": 62,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 133,
       "size": "medium",
-      "distance": 276,
-      "status": "free"
+      "distance": 64,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 134,
-      "size": "large",
-      "distance": 278,
-      "status": "free"
+      "size": "medium",
+      "distance": 66,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 135,
-      "size": "small",
-      "distance": 280,
-      "status": "free"
+      "size": "medium",
+      "distance": 68,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 136,
       "size": "medium",
-      "distance": 282,
-      "status": "free"
+      "distance": 70,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 137,
-      "size": "large",
-      "distance": 284,
-      "status": "free"
+      "size": "medium",
+      "distance": 72,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 138,
-      "size": "small",
-      "distance": 286,
-      "status": "free"
+      "size": "medium",
+      "distance": 74,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 139,
       "size": "medium",
-      "distance": 288,
-      "status": "free"
+      "distance": 76,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 140,
-      "size": "large",
-      "distance": 290,
-      "status": "free"
+      "size": "medium",
+      "distance": 78,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 141,
-      "size": "small",
-      "distance": 292,
-      "status": "free"
+      "size": "medium",
+      "distance": 80,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 142,
       "size": "medium",
-      "distance": 294,
-      "status": "free"
+      "distance": 82,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 143,
-      "size": "large",
-      "distance": 296,
-      "status": "free"
+      "size": "medium",
+      "distance": 84,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 144,
-      "size": "small",
-      "distance": 298,
-      "status": "free"
+      "size": "medium",
+      "distance": 86,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 145,
       "size": "medium",
-      "distance": 300,
-      "status": "free"
+      "distance": 88,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 146,
-      "size": "large",
-      "distance": 302,
-      "status": "free"
+      "size": "medium",
+      "distance": 90,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 147,
-      "size": "small",
-      "distance": 304,
-      "status": "free"
+      "size": "medium",
+      "distance": 92,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 148,
       "size": "medium",
-      "distance": 306,
-      "status": "free"
+      "distance": 94,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 149,
-      "size": "large",
-      "distance": 308,
-      "status": "free"
+      "size": "medium",
+      "distance": 96,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     },
     {
       "id": 150,
-      "size": "small",
-      "distance": 310,
-      "status": "free"
+      "size": "medium",
+      "distance": 98,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 151,
+      "size": "medium",
+      "distance": 100,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 152,
+      "size": "medium",
+      "distance": 102,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 153,
+      "size": "medium",
+      "distance": 104,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 154,
+      "size": "medium",
+      "distance": 106,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 155,
+      "size": "medium",
+      "distance": 108,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 156,
+      "size": "medium",
+      "distance": 110,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 157,
+      "size": "medium",
+      "distance": 112,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 158,
+      "size": "medium",
+      "distance": 114,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 159,
+      "size": "medium",
+      "distance": 116,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 160,
+      "size": "medium",
+      "distance": 118,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 161,
+      "size": "medium",
+      "distance": 120,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 162,
+      "size": "medium",
+      "distance": 122,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 163,
+      "size": "medium",
+      "distance": 124,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 164,
+      "size": "medium",
+      "distance": 126,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 165,
+      "size": "medium",
+      "distance": 128,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 166,
+      "size": "medium",
+      "distance": 130,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 167,
+      "size": "medium",
+      "distance": 132,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 168,
+      "size": "medium",
+      "distance": 134,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 169,
+      "size": "medium",
+      "distance": 136,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
+    },
+    {
+      "id": 170,
+      "size": "medium",
+      "distance": 138,
+      "status": "free",
+      "zone": "Zone C",
+      "features": []
     }
   ]
 }

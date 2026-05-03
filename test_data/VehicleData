@@ -1,0 +1,101 @@
+Vehicle Model,Category,Vehicle Size
+Hero Splendor Plus,Two Wheeler,Small
+Honda Activa 6G,Two Wheeler,Small
+Royal Enfield Classic 350,Two Wheeler,Small
+Bajaj Pulsar 150,Two Wheeler,Small
+TVS Jupiter,Two Wheeler,Small
+Suzuki Access 125,Two Wheeler,Small
+Yamaha MT-15 V2,Two Wheeler,Small
+KTM Duke 390,Two Wheeler,Small
+Honda Shine 125,Two Wheeler,Small
+Bajaj Platina 100,Two Wheeler,Small
+Royal Enfield Bullet 350,Two Wheeler,Small
+Royal Enfield Hunter 350,Two Wheeler,Small
+Yamaha R15 V4,Two Wheeler,Small
+Royal Enfield Himalayan 450,Two Wheeler,Small
+Ola S1 Pro,Two Wheeler,Small
+Ather 450X,Two Wheeler,Small
+Bajaj Chetak,Two Wheeler,Small
+Royal Enfield Meteor 350,Two Wheeler,Small
+TVS NTorq 125,Two Wheeler,Small
+Honda SP 125,Two Wheeler,Small
+TVS Apache RTR 160,Two Wheeler,Small
+TVS Ronin,Two Wheeler,Small
+Hero Xtreme 160R,Two Wheeler,Small
+Bajaj Dominar 400,Two Wheeler,Small
+Maruti Suzuki Alto K10,Hatchback,Small
+Maruti Suzuki Swift,Hatchback,Small
+Maruti Suzuki Baleno,Hatchback,Medium
+Maruti Suzuki Wagon R,Hatchback,Small
+Maruti Suzuki Celerio,Hatchback,Small
+Maruti Suzuki Ignis,Hatchback,Small
+Tata Tiago,Hatchback,Small
+Tata Altroz,Hatchback,Medium
+Hyundai Grand i10 Nios,Hatchback,Small
+Hyundai i20,Hatchback,Medium
+Renault Kwid,Hatchback,Small
+Citroen C3,Hatchback,Small
+Toyota Glanza,Hatchback,Medium
+MG Comet EV,Hatchback,Small
+Tata Nexon,Compact SUV,Medium
+Maruti Suzuki Brezza,Compact SUV,Medium
+Hyundai Venue,Compact SUV,Medium
+Kia Sonet,Compact SUV,Medium
+Tata Punch,Micro SUV,Small
+Maruti Suzuki Fronx,Crossover,Medium
+Hyundai Exter,Micro SUV,Small
+Mahindra XUV300,Compact SUV,Medium
+Renault Kiger,Compact SUV,Medium
+Nissan Magnite,Compact SUV,Medium
+Toyota Taisor,Crossover,Medium
+Honda WR-V,Compact SUV,Medium
+Ford EcoSport,Compact SUV,Medium
+Hyundai Creta,Mid-size SUV,Medium
+Kia Seltos,Mid-size SUV,Medium
+Maruti Suzuki Grand Vitara,Mid-size SUV,Medium
+Honda Elevate,Mid-size SUV,Medium
+Skoda Kushaq,Mid-size SUV,Medium
+Volkswagen Taigun,Mid-size SUV,Medium
+MG Astor,Mid-size SUV,Medium
+MG Hector,Mid-size SUV,Large
+Tata Harrier,Mid-size SUV,Large
+Mahindra XUV700,Mid-size SUV,Large
+Mahindra Scorpio-N,Mid-size SUV,Large
+Mahindra Scorpio Classic,Mid-size SUV,Large
+Tata Safari,Full-size SUV,Large
+Hyundai Alcazar,Mid-size SUV,Large
+Kia Carens,MPV,Large
+Toyota Innova Crysta,MPV,Large
+Toyota Innova Hycross,MPV,Large
+Maruti Suzuki Ertiga,MPV,Medium
+Maruti Suzuki XL6,MPV,Medium
+Toyota Fortuner,Full-size SUV,Large
+Ford Endeavour,Full-size SUV,Large
+MG Gloster,Full-size SUV,Large
+Skoda Kodiaq,Full-size SUV,Large
+Volkswagen Tiguan,Mid-size SUV,Large
+Hyundai Tucson,Mid-size SUV,Large
+Maruti Suzuki Dzire,Compact Sedan,Medium
+Hyundai Aura,Compact Sedan,Medium
+Tata Tigor,Compact Sedan,Medium
+Honda Amaze,Compact Sedan,Medium
+Honda City,Sedan,Large
+Hyundai Verna,Sedan,Large
+Skoda Slavia,Sedan,Large
+Volkswagen Virtus,Sedan,Large
+Maruti Suzuki Ciaz,Sedan,Large
+Skoda Superb,Sedan,Large
+Toyota Camry,Sedan,Large
+Mahindra Thar,Off-road SUV,Medium
+Maruti Suzuki Jimny,Off-road SUV,Small
+Force Gurkha,Off-road SUV,Medium
+Land Rover Defender,Luxury SUV,Large
+Land Rover Range Rover,Luxury SUV,Large
+BMW X1,Luxury SUV,Medium
+BMW X5,Luxury SUV,Large
+BMW 3 Series,Luxury Sedan,Large
+Mercedes-Benz C-Class,Luxury Sedan,Large
+Mercedes-Benz E-Class,Luxury Sedan,Large
+Mercedes-Benz S-Class,Luxury Sedan,Large
+Audi Q3,Luxury SUV,Medium
+Audi Q7,Luxury SUV,Large

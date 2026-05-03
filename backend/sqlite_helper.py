@@ -26,8 +26,15 @@ def init_db():
     cur.execute("""
     CREATE TABLE IF NOT EXISTS bookings (
         plate TEXT PRIMARY KEY,
+        name TEXT,
         model TEXT,
+        brand TEXT,
+        category TEXT,
         size TEXT,
+        entry_time TEXT,
+        exit_time TEXT,
+        preferences TEXT,
+        fuel_type TEXT,
         slot_id INTEGER,
         status TEXT DEFAULT 'pending',
         created_at TEXT
@@ -68,13 +75,13 @@ def init_db():
     conn.close()
 
 
-def create_booking(plate, model, size, slot_id=None):
+def create_booking(plate, name, brand, model, category, size, entry_time, exit_time, preferences, fuel_type, slot_id=None):
     """Create or update a booking"""
     conn = get_conn()
     cur = conn.cursor()
     cur.execute(
-        "INSERT OR REPLACE INTO bookings (plate, model, size, slot_id, status, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-        (plate, model, size, slot_id, 'pending', datetime.utcnow().isoformat())
+        "INSERT OR REPLACE INTO bookings (plate, name, model, brand, category, size, entry_time, exit_time, preferences, fuel_type, slot_id, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (plate, name, model, brand, category, size, entry_time, exit_time, preferences, fuel_type, slot_id, 'pending', datetime.utcnow().isoformat())
     )
     conn.close()
 
@@ -83,7 +90,7 @@ def get_booking_by_plate(plate):
     """Get booking information by plate number"""
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT plate, model, size, slot_id, status FROM bookings WHERE plate=?", (plate,))
+    cur.execute("SELECT plate, name, model, brand, category, size, entry_time, exit_time, preferences, fuel_type, slot_id, status FROM bookings WHERE plate=?", (plate,))
     row = cur.fetchone()
     conn.close()
 
@@ -92,10 +99,17 @@ def get_booking_by_plate(plate):
 
     return {
         "plate": row[0],
-        "model": row[1],
-        "size": row[2],
-        "slot_id": row[3],
-        "status": row[4]
+        "name": row[1],
+        "model": row[2],
+        "brand": row[3],
+        "category": row[4],
+        "size": row[5],
+        "entry_time": row[6],
+        "exit_time": row[7],
+        "preferences": row[8],
+        "fuel_type": row[9],
+        "slot_id": row[10],
+        "status": row[11]
     }
 
 
@@ -229,3 +243,30 @@ def get_entry_by_plate(plate):
         "price": row[1],
         "entered_at": row[2]
     }
+
+def get_active_entries_with_details():
+    """Get active entries joined with booking details if available"""
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT 
+            e.slot_id, e.plate, e.model, 
+            b.name, b.brand, b.category, b.fuel_type
+        FROM entries e
+        LEFT JOIN bookings b ON e.plate = b.plate
+        WHERE e.exited_at IS NULL
+    ''')
+    rows = cur.fetchall()
+    conn.close()
+    
+    mapping = {}
+    for r in rows:
+        mapping[r[0]] = {
+            "plate": r[1],
+            "model": r[2],
+            "name": r[3] or "Unknown",
+            "brand": r[4] or "Unknown",
+            "category": r[5] or "Unknown",
+            "fuel_type": r[6] or "Unknown"
+        }
+    return mapping

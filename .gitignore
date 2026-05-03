@@ -24,3 +24,5 @@ models/*.pt
 # Database (if you don't want it tracked)
 parking.db
 venv
+
+.agents

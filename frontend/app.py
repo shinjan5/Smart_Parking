@@ -104,36 +104,126 @@ if route == "Customer Portal":
         5. Park in your assigned spot — no manual check-in needed!
         """)
 
-        with st.form("booking_form", clear_on_submit=True):
-            col1, col2 = st.columns(2)
-            with col1:
-                plate = st.text_input("Licence Plate Number *", max_chars=20, placeholder="e.g., WB10AB1234").upper()
-                model = st.text_input("Car Model *", placeholder="e.g., Honda City")
-            with col2:
-                size = st.selectbox("Vehicle Size *", ["small", "medium", "large"])
+        import csv
+        from pathlib import Path
+        import os
 
-            submit = st.form_submit_button("🎫 Create Pre-Booking", type="primary", use_container_width=True)
+        vehicle_data = {}
+        csv_path = Path("test_data/VehicleData")
+        if csv_path.exists():
+            with open(csv_path, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    model_name = row.get("Vehicle Model", "").strip()
+                    if model_name:
+                        vehicle_data[model_name] = {
+                            "Category": row.get("Category", "").strip(),
+                            "Vehicle Size": row.get("Vehicle Size", "").strip()
+                        }
+        vehicle_data["Other (Specify)"] = {"Category": "Hatchback", "Vehicle Size": "Small"}
 
-            if submit:
-                if not plate or not model:
-                    st.error("❌ Please fill in all required fields")
-                elif len(plate) < 4:
-                    st.error("❌ Licence plate must be at least 4 characters")
-                else:
-                    try:
-                        existing = get_booking_by_plate(plate)
-                        if existing:
-                            st.warning(f"⚠️ A booking already exists for **{plate}**")
-                            st.json(existing)
-                        else:
-                            create_booking(plate, model, size)
-                            st.success("✅ Pre-booking created successfully!")
-                            st.balloons()
-                            st.info(f"**Booking Confirmed:**\n- Plate: **{plate}**\n- Vehicle: **{model}** ({size})\n- Status: **Awaiting entry**\n\nDrive to the gate — the system will handle the rest!")
-                            time.sleep(1)
-                            st.rerun()
-                    except Exception as e:
-                        st.error(f"❌ Error creating booking: {e}")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            name = st.text_input("Full Name *", placeholder="e.g., John Doe")
+            plate = st.text_input("Licence Plate Number *", max_chars=20, placeholder="e.g., WB10AB1234").upper()
+            
+            model_options = list(vehicle_data.keys())
+            selected_model = st.selectbox("Car Model *", model_options)
+            
+            if selected_model == "Other (Specify)":
+                model = st.text_input("Specify Car Model *")
+            else:
+                model = selected_model
+        
+        with col_b:
+            if selected_model == "Other (Specify)":
+                brand = st.text_input("Brand *")
+                all_cats = list(set(v["Category"] for v in vehicle_data.values() if v["Category"]))
+                if not all_cats: all_cats = ["Hatchback", "Sedan", "SUV", "Two Wheeler"]
+                category = st.selectbox("Vehicle Category *", sorted(all_cats))
+                size = st.selectbox("Vehicle Size *", ["Small", "Medium", "Large"])
+            else:
+                car_info = vehicle_data[selected_model]
+                guess_brand = model.split(" ")[0]
+                if model.startswith("Maruti Suzuki"): guess_brand = "Maruti Suzuki"
+                elif model.startswith("Royal Enfield"): guess_brand = "Royal Enfield"
+                elif model.startswith("Land Rover"): guess_brand = "Land Rover"
+                elif model.startswith("Mercedes-Benz"): guess_brand = "Mercedes-Benz"
+                
+                brand = st.text_input("Brand *", value=guess_brand)
+                category = st.text_input("Vehicle Category *", value=car_info["Category"], disabled=True)
+                size = st.text_input("Vehicle Size *", value=car_info["Vehicle Size"], disabled=True)
+                
+            fuel_type = st.selectbox("Fuel Type *", ["Petrol", "Diesel", "EV", "Hybrid"])
+
+        col_t1, col_t2 = st.columns(2)
+        with col_t1:
+            entry_time = st.time_input("Expected Entry Time *")
+        with col_t2:
+            exit_time = st.time_input("Expected Exit Time *")
+        
+        available_prefs = ["Near Elevator", "Near Stairs", "Covered"]
+        if fuel_type in ["EV", "Hybrid"]:
+            available_prefs.append("EV Charging Dock")
+        preferences = st.multiselect("Preferences", available_prefs)
+
+        submit = st.button("🎫 Create Pre-Booking", type="primary", use_container_width=True)
+
+        if submit:
+            if not name or not plate or not model or not brand:
+                st.error("❌ Please fill in all required fields")
+            elif len(plate) < 4:
+                st.error("❌ Licence plate must be at least 4 characters")
+            else:
+                try:
+                    existing = get_booking_by_plate(plate)
+                    if existing:
+                        st.warning(f"⚠️ A booking already exists for **{plate}**")
+                        st.json(existing)
+                    else:
+                        prefs_str = ", ".join(preferences)
+                        db_size = size.lower()
+                        create_booking(plate, name, brand, model, category, db_size, str(entry_time), str(exit_time), prefs_str, fuel_type)
+                        st.success("✅ Pre-booking created successfully!")
+                        st.balloons()
+                        
+                        # Allocate slot and get price
+                        with st.spinner("Allocating slot & calculating price..."):
+                            import requests
+                            try:
+                                resp = requests.post("http://localhost:5000/prebook/allocate", json={
+                                    "plate": plate,
+                                    "size": db_size,
+                                    "preferences": prefs_str
+                                }, timeout=180)
+                                data = resp.json()
+                                if data.get("status") == "success":
+                                    slot_msg = f"**{data.get('slot_id')}**"
+                                    price_val = data.get('price', {}).get('price', 'N/A')
+                                    price_msg = f"**₹{price_val} / hr**"
+                                else:
+                                    slot_msg = "Pending (No slot found)"
+                                    price_msg = "N/A"
+                            except Exception:
+                                slot_msg = "Pending Allocation"
+                                price_msg = "TBD"
+
+                        st.info(f"""
+                        **Booking Confirmed:**
+                        - Name: **{name}**
+                        - Plate: **{plate}**
+                        - Vehicle: **{brand} {model}** ({category} - {size})
+                        - Fuel: **{fuel_type}**
+                        - Preferences: **{prefs_str}**
+                        - Allocated Slot: {slot_msg}
+                        - Dynamic Price Estimate: {price_msg}
+
+                        Drive to the gate — the system will handle the rest!
+                        """)
+                        time.sleep(4)
+                        st.rerun()
+                except Exception as e:
+                    st.error(f"❌ Error creating booking: {e}")
 
     # ══ TAB 2: CHECK STATUS ══════════════════════════════════════════════════════
     with tab2:

@@ -8,7 +8,7 @@ import os, json
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
@@ -79,17 +79,23 @@ def create_booking_endpoint():
     try:
         data = request.get_json(force=True)
         plate = (data.get("plate") or "").strip().upper()
+        name  = (data.get("name") or "").strip()
         model = (data.get("model") or "").strip()
+        brand = (data.get("brand") or "").strip()
         size  = (data.get("size")  or "medium").strip().lower()
+        entry_time = (data.get("entry_time") or "").strip()
+        exit_time  = (data.get("exit_time") or "").strip()
+        preferences = (data.get("preferences") or "").strip()
+        fuel_type = (data.get("fuel_type") or "").strip()
 
-        if not plate or not model:
-            return jsonify({"status": "error", "message": "plate and model are required"}), 400
+        if not plate or not model or not name:
+            return jsonify({"status": "error", "message": "plate, name, and model are required"}), 400
 
         if len(plate) < 4:
             return jsonify({"status": "error", "message": "plate must be at least 4 characters"}), 400
 
-        if size not in ("small", "medium", "large"):
-            return jsonify({"status": "error", "message": "size must be small, medium, or large"}), 400
+        if size not in ("small", "medium", "large", "sedan", "bike"):
+            return jsonify({"status": "error", "message": "invalid size/category"}), 400
 
         from sqlite_helper import get_booking_by_plate, create_booking
 
@@ -97,7 +103,7 @@ def create_booking_endpoint():
         if existing:
             return jsonify({"status": "exists", "booking": existing})
 
-        create_booking(plate, model, size)
+        create_booking(plate, name, brand, model, size, entry_time, exit_time, preferences, fuel_type)
         booking = get_booking_by_plate(plate)
         return jsonify({"status": "created", "booking": booking})
 
@@ -152,6 +158,49 @@ def benchmark_scenario():
     except Exception as e:
         print(f"[BENCHMARK] ERROR: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route("/prebook/allocate", methods=["POST"])
+def prebook_allocate():
+    """
+    Allocates a slot and calculates price for a pre-booking.
+    Accepts JSON: { "plate": "...", "size": "...", "preferences": "..." }
+    """
+    try:
+        data = request.get_json(force=True)
+        plate = data.get("plate")
+        size = data.get("size", "medium")
+        prefs = data.get("preferences", "")
+        
+        from agentic import llm_select_slot, get_current_occupancy, calculate_dynamic_price
+        from sqlite_helper import get_conn
+        
+        # Allocate the best slot via the LLM slot-selection logic
+        slot_id = llm_select_slot({"plate": plate, "size": size, "preferences": prefs})
+        
+        # Calculate dynamic price using the @tool functions (.invoke for LangChain tools)
+        occ = get_current_occupancy.invoke({})
+        price_result = calculate_dynamic_price.invoke({
+            "occupied": occ["occupied"],
+            "total": occ["total"],
+            "preferences": prefs
+        })
+        
+        if slot_id:
+            # Mark slot as reserved in digital twin (already done inside llm_select_slot)
+            # Update the booking record with the assigned slot
+            conn = get_conn()
+            cur = conn.cursor()
+            cur.execute("UPDATE bookings SET slot_id=? WHERE plate=?", (slot_id, plate))
+            conn.close()
+            
+            return jsonify({"status": "success", "slot_id": slot_id, "price": price_result})
+        else:
+            return jsonify({"status": "error", "message": "No slots available for this vehicle size/preference"})
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 
 
 # ── vehicle exit ─────────────────────────────────────────────────────────────

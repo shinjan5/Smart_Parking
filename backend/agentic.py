@@ -14,8 +14,8 @@ from pathlib import Path
 from PIL import Image
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (override=True ensures .env wins over stale system vars)
+load_dotenv(override=True)
 
 from ultralytics import YOLO
 from langchain_openai import ChatOpenAI
@@ -23,6 +23,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.tools import tool
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
+
+# --- Gemini imports (commented out — uncomment if OpenRouter breaks) ---
+# from langchain_google_genai import ChatGoogleGenerativeAI
 
 from sqlite_helper import (
     init_db,
@@ -48,18 +51,63 @@ if torch.cuda.is_available():
 else:
     reader = easyocr.Reader(["en"], gpu=False)
 
+# ── LLM Configuration ────────────────────────────────────────────────────────
+# Primary: OpenRouter (free tier) with a 60-second timeout per request.
+# If OpenRouter ever breaks, comment out the block below and uncomment the
+# Gemini block further down.
+
 llm = ChatOpenAI(
-    model="moonshotai/kimi-k2:free",
+    model="nvidia/nemotron-nano-9b-v2:free",
     temperature=0,
-    openai_api_key=os.environ.get("OPENROUTER_API_KEY"),
+    openai_api_key=os.environ.get("OPENROUTER_API_KEY", "missing_key"),
     openai_api_base="https://openrouter.ai/api/v1",
+    request_timeout=60,          # hard timeout — prevents hanging
+    max_retries=2,               # retry transient 5xx once
 )
+
+# --- Gemini fallback (commented out) ---
+# llm = ChatGoogleGenerativeAI(
+#     model="gemini-1.5-flash",
+#     temperature=0,
+#     google_api_key=os.environ.get("GOOGLE_API_KEY"),
+#     request_timeout=60,
+# )
 
 init_db()
 
 # Research Mock Mode (set to True to bypass LLM for testing)
 MOCK_MODE = os.environ.get("MOCK_MODE", "false").lower() == "true"
 print(f"DEBUG: agentic.py MOCK_MODE = {MOCK_MODE}")
+
+
+# ---------------------------------------------------------------------------
+# Runtime model swap — used by benchmark runner to test multiple models
+# ---------------------------------------------------------------------------
+
+def set_model(model_id: str):
+    """
+    Hot-swap the global LLM and rebind all agent tool-calling chains.
+    Call this before running entry_recognition_agent() with a different model.
+
+    Args:
+        model_id: OpenRouter model string, e.g. 'google/gemma-3-4b-it:free'
+    """
+    global llm, reservation_llm, pricing_llm, persist_llm
+
+    print(f"[MODEL SWAP] Switching to: {model_id}")
+    llm = ChatOpenAI(
+        model=model_id,
+        temperature=0,
+        openai_api_key=os.environ.get("OPENROUTER_API_KEY", "missing_key"),
+        openai_api_base="https://openrouter.ai/api/v1",
+        request_timeout=60,
+        max_retries=1,
+    )
+    # Must re-bind tools after swapping base LLM
+    reservation_llm = llm.bind_tools(reservation_tools)
+    pricing_llm     = llm.bind_tools(pricing_tools)
+    persist_llm     = llm.bind_tools(persist_tools)
+    print(f"[MODEL SWAP] Done — all agents now using {model_id}")
 
 
 # ---------------------------------------------------------------------------
@@ -251,29 +299,41 @@ def get_current_occupancy() -> dict:
 
 
 @tool
-def calculate_dynamic_price(occupied: int, total: int) -> dict:
+def calculate_dynamic_price(occupied: int, total: int, preferences: str = "") -> dict:
     """
     Apply the dynamic pricing formula to derive the current parking fee.
 
     Formula:
-        price = BASE_PRICE * (1 + ELASTICITY * max(0, ratio - 0.5))
+        price = BASE_PRICE * (1 + ELASTICITY * max(0, ratio - 0.5)) + SURCHARGES
         where ratio = occupied / total
 
     BASE_PRICE  = 50  (INR)
     ELASTICITY  = 1.2
+    
+    Surcharges:
+    - EV Charging Dock: +30 INR
+    - Covered: +20 INR
+    - Near Elevator: +10 INR
 
     Args:
         occupied: number of currently occupied slots
         total:    total number of slots in the facility
+        preferences: string of comma-separated preferences
 
     Returns a dict with 'price' (float, rounded to 2 dp) and a 'reasoning' string.
     """
     ratio = occupied / total if total else 0
     raw_price = BASE_PRICE * (1 + ELASTICITY * max(0, ratio - 0.5))
-    price = round(raw_price if isfinite(raw_price) else BASE_PRICE, 2)
+    
+    surcharge = 0
+    if "EV Charging" in preferences: surcharge += 30
+    if "Covered" in preferences: surcharge += 20
+    if "Near Elevator" in preferences: surcharge += 10
+    
+    price = round((raw_price + surcharge) if isfinite(raw_price) else BASE_PRICE, 2)
     reasoning = (
         f"ratio={ratio:.2%}, surcharge_factor={max(0, ratio - 0.5):.4f}, "
-        f"raw_price=INR {raw_price:.4f} -> final=INR {price}"
+        f"pref_surcharge={surcharge}, raw_price=INR {raw_price:.4f} -> final=INR {price}"
     )
     print(f"[TOOL:pricing] {reasoning}")
     return {"price": price, "reasoning": reasoning}
@@ -352,22 +412,54 @@ slot_prompt = ChatPromptTemplate.from_messages([
     ("system", """You are a parking slot assignment system.
     CRITICAL RULES:
     1. ONLY select slots where status is "free"
-    2. Select the slot with the SMALLEST distance value (closest to entrance)
-    3. Return ONLY valid JSON: {{"slot_id": number}}
-    4. If multiple slots qualify, choose the one with minimum distance
+    2. Try to match the user's preferences (e.g. EV Charging, Covered, Near Elevator) with the slot features and zone if possible. EV Charging requires 'ev_charging' feature.
+    3. If multiple slots qualify (or no preferences are specified), choose the one with the SMALLEST distance value (closest to entrance)
+    4. Return ONLY valid JSON: {{"slot_id": number}}
     """),
     ("human", """Available slots (already filtered for correct size and free status):
 {slots}
 
-Vehicle needing parking:
+Vehicle needing parking (including preferences):
 {vehicle}
 
-Select the CLOSEST free slot (minimum distance). Return only: {{"slot_id": number}}""")
+Select the BEST free slot based on preferences and minimum distance. Return only: {{"slot_id": number}}""")
 ])
 
 
 def size_compatible_strict(slot_size: str, vehicle_size: str) -> bool:
-    return slot_size == vehicle_size
+    # Map new categories to base slot sizes
+    # Map any vehicle size/category label -> compatible slot sizes
+    mapping = {
+        # Standard slot sizes (direct match)
+        "small":        ["small"],
+        "medium":       ["medium", "large"],
+        "large":        ["large"],
+        # Two-wheelers
+        "bike":         ["small"],
+        "two wheeler":  ["small"],
+        "scooter":      ["small"],
+        # Hatchbacks / small cars
+        "hatchback":    ["small", "medium"],
+        "mini":         ["small"],
+        # Sedans
+        "sedan":        ["medium", "large"],
+        "compact sedan":["medium"],
+        # SUVs and larger
+        "suv":          ["medium", "large"],
+        "luxury suv":   ["large"],
+        "premium suv":  ["large"],
+        "compact suv":  ["medium"],
+        # Other categories
+        "van":          ["large"],
+        "truck":        ["large"],
+        "mpv":          ["medium", "large"],
+        "electric":     ["small", "medium", "large"],
+        "coupe":        ["medium"],
+        "convertible":  ["medium"],
+    }
+    v_lower = vehicle_size.lower().strip()
+    allowed_slots = mapping.get(v_lower, ["medium", "large"])  # fallback: medium+ for unknown
+    return slot_size.lower() in allowed_slots
 
 
 def llm_select_slot(vehicle: Dict[str, Any]) -> Optional[int]:
@@ -376,13 +468,15 @@ def llm_select_slot(vehicle: Dict[str, Any]) -> Optional[int]:
     plate = vehicle.get("plate", "UNKNOWN")
 
     print(f"[SLOT] Finding slot for {plate} (size: {size}) | MOCK_MODE={MOCK_MODE}")
-    print(f"[SLOT] Current slots state: {json.dumps(dt['slots'], indent=2)}")
+    # Note: full twin dump removed to avoid flooding logs with 170 slots
 
     free = [
         s for s in dt["slots"]
         if s["status"] == "free" and size_compatible_strict(s["size"], size)
     ]
-    print(f"[SLOT] Filtered free slots: {free}")
+    # Sort by distance so closest slots come first
+    free.sort(key=lambda s: s["distance"])
+    print(f"[SLOT] Filtered free slots ({len(free)} total): {[s['id'] for s in free[:10]]}...")
 
     if not free:
         print(f"[SLOT] No free {size} slots available!")
@@ -404,8 +498,10 @@ def llm_select_slot(vehicle: Dict[str, Any]) -> Optional[int]:
         print(f"[SLOT] MOCK_MODE: Selected closest slot {slot_id}")
     else:
         try:
+            # Only send the 10 closest candidates to the LLM to keep prompt small
+            candidates = free[:10]
             msg = slot_prompt.invoke({
-                "slots": json.dumps(free),
+                "slots": json.dumps(candidates),
                 "vehicle": json.dumps(vehicle),
             })
             res = llm.invoke(msg)
@@ -611,6 +707,7 @@ def slot_node(state: EntryState) -> EntryState:
         "plate": plate,
         "model": state.get("model"),
         "size":  size,
+        "preferences": state.get("booking", {}).get("preferences", "")
     })
 
     if not slot:
@@ -635,7 +732,7 @@ Your job is to determine the correct parking fee for a vehicle that is about to 
 
 Follow these steps EXACTLY using the available tools:
 1. Call `get_current_occupancy` to learn how many slots are occupied and the total capacity.
-2. Call `calculate_dynamic_price` with the occupied and total values you just retrieved.
+2. Call `calculate_dynamic_price` with the occupied, total values, and the provided preferences string.
 3. Return ONLY a JSON object: {"price": <number>}
 
 Do NOT skip either tool call. Do NOT invent occupancy numbers."""
@@ -653,7 +750,7 @@ def pricing_node(state: EntryState) -> EntryState:
 
     messages = [
         {"role": "system", "content": _PRICING_SYSTEM},
-        {"role": "user",   "content": "Calculate the current dynamic parking fee."},
+        {"role": "user",   "content": f"Calculate the current dynamic parking fee. Preferences: '{state.get('booking', {}).get('preferences', '')}'"},
     ]
 
     tool_executor = ToolNode(pricing_tools)
@@ -663,7 +760,8 @@ def pricing_node(state: EntryState) -> EntryState:
         occ = get_current_occupancy.invoke({})
         res = calculate_dynamic_price.invoke({
             "occupied": occ["occupied"], 
-            "total": occ["total"]
+            "total": occ["total"],
+            "preferences": state.get("booking", {}).get("preferences", "")
         })
         price = res["price"]
         steps += 2
